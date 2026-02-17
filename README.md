@@ -7,7 +7,7 @@ Use this template as a base for cloning new apps and accelerating project setup.
 ## Project Overview
 
 - Purpose: provide a production-ready starting point that teams can clone and customize to ship new Flutter apps quickly.
-- Flavors: includes two entry points: `apps/sandwich_app/lib/main_development.dart` and `apps/sandwich_app/lib/main_production.dart` (dev/pro flavors are wired via the `.vscode/launch.json` and typical Flutter `--flavor` usage).
+- Flavors: includes two entry points: `apps/user_app/lib/main_development.dart` and `apps/user_app/lib/main_production.dart` (dev/pro flavors are wired via the `.vscode/launch.json` and typical Flutter `--flavor` usage).
 - Architecture: feature-based app layout under `apps/`, with `core/` (DI + networking + helpers) and `shared/` (widgets, models, styles). The codebase uses `flutter_bloc` (Cubit style) + repository/service layers and `get_it` for DI.
 
 ## Quick index (what's in this repo)
@@ -17,7 +17,7 @@ Top-level files and directories you'll commonly use:
 ```
 /
 apps/
-  sandwich_app/           # Example app (full Flutter project)
+  user_app/           # Example app (full Flutter project)
     android/
     ios/
     macos/
@@ -51,11 +51,11 @@ README.md
 ```
 
 Key files to know:
-- `apps/sandwich_app/lib/main_development.dart` and `apps/sandwich_app/lib/main_production.dart` - flavor entry points.
+- `apps/user_app/lib/main_development.dart` and `apps/user_app/lib/main_production.dart` - flavor entry points.
 - `core/lib/di/` - dependency injection base setup (uses `get_it`).
 - `core/lib/network/` - `dio` factory, API service wrappers and error handling.
 - `shared/lib/widgets/` - shared widgets (buttons, headers, toast helpers using `fluttertoast`).
-- `apps/sandwich_app/lib/features/` - feature-first structure containing UI, logic (Cubits), models, and repos.
+- `apps/user_app/lib/features/` - feature-first structure containing UI, logic (Cubits), models, and repos.
 
 ## Monorepo structure (what goes where)
 
@@ -91,7 +91,7 @@ dependencies:
 
 After that:
 - Update imports to use `package:core/...` and `package:shared/...`.
-- Create app DI wiring similar to `apps/sandwich_app/lib/di/` and call it from your `main_*` entry points.
+- Create app DI wiring similar to `apps/user_app/lib/di/` and call it from your `main_*` entry points.
 
 ## Packages & Dependencies (from `pubspec.yaml`)
 
@@ -134,7 +134,7 @@ Note: some packages require platform setup (e.g., Firebase, notifications). See 
 
 ## Setup Instructions
 
-Note: replace `sandwich_app` with your app folder (for example `user_app`) when needed.
+Note: replace `user_app` with your app folder (for example `user_app`) when needed.
 
 1. Clone the repository:
 
@@ -146,7 +146,7 @@ cd my_app
 2. Install app dependencies (path packages are resolved automatically):
 
 ```powershell
-cd apps/sandwich_app
+cd apps/user_app
 flutter pub get
 ```
 
@@ -160,26 +160,26 @@ git commit -m "Initial commit from flutter_start_template"
 ```
 
 4. Rename the app (package identifiers and app name):
-- Update `apps/sandwich_app/pubspec.yaml` -> `name:` and `description`.
-- Android package: update package name under `apps/sandwich_app/android/app/src/main/kotlin/.../MainActivity.kt` and `apps/sandwich_app/android/app/src/main/AndroidManifest.xml`. Also update `apps/sandwich_app/android/app/build.gradle.kts` if necessary.
-- iOS bundle id: update `apps/sandwich_app/ios/Runner/Info.plist` and Xcode project settings.
-- macOS bundle id: `apps/sandwich_app/macos/Runner/Configs/AppInfo.xcconfig`.
+- Update `apps/user_app/pubspec.yaml` -> `name:` and `description`.
+- Android package: update package name under `apps/user_app/android/app/src/main/kotlin/.../MainActivity.kt` and `apps/user_app/android/app/src/main/AndroidManifest.xml`. Also update `apps/user_app/android/app/build.gradle.kts` if necessary.
+- iOS bundle id: update `apps/user_app/ios/Runner/Info.plist` and Xcode project settings.
+- macOS bundle id: `apps/user_app/macos/Runner/Configs/AppInfo.xcconfig`.
 
 Tip: For an automated rename you can use search-and-replace tools (e.g. ripgrep + sed) but please verify Android/iOS project files manually.
 
 5. Configure flavors and environment files:
-- This template includes `.env_dev` and `.env_pro` in `apps/sandwich_app/assets/`. Copy and update them with API keys and flags.
+- This template includes `.env_dev` and `.env_pro` in `apps/user_app/assets/`. Copy and update them with API keys and flags.
 - Launch dev flavor locally:
 
 ```powershell
-cd apps/sandwich_app
+cd apps/user_app
 flutter run --flavor dev -t lib/main_development.dart
 ```
 
-Or build an APK (verbose, from `apps/sandwich_app`):
+Or build an APK (verbose, from `apps/user_app`):
 
 ```powershell
-cd apps/sandwich_app
+cd apps/user_app
 flutter build apk --flavor dev -t lib/main_development.dart -v
 ```
 
@@ -187,15 +187,15 @@ flutter build apk --flavor dev -t lib/main_development.dart -v
 
 ## Development Notes
 
-- State management: this project uses `flutter_bloc` (Cubit) with repositories and service layers under `apps/sandwich_app/lib/features/*/logic` and `core/lib/network`.
+- State management: this project uses `flutter_bloc` (Cubit) with repositories and service layers under `apps/user_app/lib/features/*/logic` and `core/lib/network`.
 - Dependency injection: `core/lib/di/` wires `get_it` instances for repositories, services, and cubits.
 - Networking: `dio` + `pretty_dio_logger` via `core/lib/network/dio_factory.dart`.
 - Naming conventions:
 	- Feature folders should be named `snake_case` (e.g., `login_screen`).
-	- Cubit/state files follow `feature_logic_*` (see existing examples under `apps/sandwich_app/lib/features/*/logic`).
+	- Cubit/state files follow `feature_logic_*` (see existing examples under `apps/user_app/lib/features/*/logic`).
 	- Widgets that are reusable live under `shared/lib/widgets`.
  - Code style & linting: `flutter_lints` is configured; run `dart analyze` and `flutter test` regularly.
- - Localization: ARB files live under `apps/sandwich_app/lib/l10n` and generated code under `apps/sandwich_app/lib/generated` using `intl_utils`.
+ - Localization: ARB files live under `apps/user_app/lib/l10n` and generated code under `apps/user_app/lib/generated` using `intl_utils`.
 
 Edge cases & checks
 - Empty or missing `.env` keys — guard network calls and show clear logging.
@@ -211,7 +211,7 @@ git clone https://github.com/IbrahimIG1/flutter_start_template.git my_new_app
 cd my_new_app
 rm -rf .git
 git init
-cd apps/sandwich_app
+cd apps/user_app
 flutter pub get
 ```
 
@@ -220,7 +220,7 @@ flutter pub get
 3. Run the dev flavor locally:
 
 ```powershell
-cd apps/sandwich_app
+cd apps/user_app
 flutter run --flavor dev -t lib/main_development.dart
 ```
 
