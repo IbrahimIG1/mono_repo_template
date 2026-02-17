@@ -1,0 +1,8 @@
+# flutter pub run flutter_launcher_icons
+## Run This Command to Generate Icons: dart run flutter_launcher_icons:generate
+flutter_launcher_icons:
+  image_path: "assets/images/logo_foreground.png"
+  android: "launcher_icon"
+  min_sdk_android: 21 
+  ios: true
+  remove_alpha_ios: true
