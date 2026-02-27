@@ -6,11 +6,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:core/helper/get_user_token.dart';
 import 'package:core/helper/spacer.dart';
 import 'package:core/local/shared_prefrence.dart';
-import 'package:sandwich_app/core/routing/screens_names.dart';
+import 'package:monorepo_template/core/routing/screens_names.dart';
 import 'package:shared/styles/colors/colors.dart';
 import 'package:shared/styles/fonts/app_text_styles.dart';
 import 'package:shared/widgets/buttons/app_button.dart';
-import 'package:sandwich_app/features/language_screen/logic/language_cubit.dart';
+import 'package:monorepo_template/features/language_screen/logic/language_cubit.dart';
 
 // import 'package:dio/dio.dart';
 class ChangeLangScreenBody extends StatelessWidget {
@@ -124,4 +124,3 @@ class ChangeLangScreenBody extends StatelessWidget {
     );
   }
 }
-

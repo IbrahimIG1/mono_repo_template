@@ -1,8 +1,8 @@
 import 'dart:developer';
-import 'package:sandwich_app/features/notifications_screen/logic/cubit/notification_state.dart';
-import 'package:sandwich_app/features/notifications_screen/logic/models/notification_model.dart';
-import 'package:sandwich_app/features/notifications_screen/logic/notification_factory.dart';
-import 'package:sandwich_app/features/notifications_screen/logic/repo/notification_repo.dart';
+import 'package:monorepo_template/features/notifications_screen/logic/cubit/notification_state.dart';
+import 'package:monorepo_template/features/notifications_screen/logic/models/notification_model.dart';
+import 'package:monorepo_template/features/notifications_screen/logic/notification_factory.dart';
+import 'package:monorepo_template/features/notifications_screen/logic/repo/notification_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NotificationCubit extends Cubit<NotificationState> {

@@ -1,15 +1,15 @@
 ﻿import 'package:core/di/di.dart';
 import 'package:core/helper/extension.dart';
 import 'package:core/helper/spacer.dart';
-import 'package:sandwich_app/core/routing/screens_names.dart';
+import 'package:monorepo_template/core/routing/screens_names.dart';
 import 'package:shared/styles/colors/colors.dart';
 import 'package:shared/styles/fonts/app_text_styles.dart';
 import 'package:shared/widgets/buttons/app_header.dart';
 import 'package:shared/widgets/buttons/app_button.dart';
 import 'package:shared/widgets/text_field/app_text_form_feild.dart';
 import 'package:shared/widgets/toast/app_toast.dart';
-import 'package:sandwich_app/features/reset_password_screen/logic/cubit/reset_passord_cubit.dart';
-import 'package:sandwich_app/features/reset_password_screen/logic/cubit/reset_passord_state.dart';
+import 'package:monorepo_template/features/reset_password_screen/logic/cubit/reset_passord_cubit.dart';
+import 'package:monorepo_template/features/reset_password_screen/logic/cubit/reset_passord_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -142,4 +142,3 @@ class ResetPasswordScreen extends StatelessWidget {
     );
   }
 }
-

@@ -1,11 +1,11 @@
 ﻿import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:core/helper/extension.dart';
-import 'package:sandwich_app/core/routing/screens_names.dart';
+import 'package:monorepo_template/core/routing/screens_names.dart';
 import 'package:shared/styles/colors/colors.dart';
 import 'package:shared/styles/fonts/app_text_styles.dart';
 import 'package:shared/widgets/buttons/app_button.dart';
-import 'package:sandwich_app/features/login_screen/logic/cubit/login_cubit.dart';
-import 'package:sandwich_app/features/login_screen/logic/cubit/login_state.dart';
+import 'package:monorepo_template/features/login_screen/logic/cubit/login_cubit.dart';
+import 'package:monorepo_template/features/login_screen/logic/cubit/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -72,4 +72,3 @@ Widget loginGuestSection(BuildContext context) {
     ],
   );
 }
-

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:core/helper/extension.dart';
-import 'package:sandwich_app/core/routing/screens_names.dart';
+import 'package:monorepo_template/core/routing/screens_names.dart';
 import 'package:shared/styles/fonts/app_text_styles.dart';
 
 Widget buildForgotPassword(BuildContext context) {
@@ -19,4 +19,3 @@ Widget buildForgotPassword(BuildContext context) {
     ),
   );
 }
-

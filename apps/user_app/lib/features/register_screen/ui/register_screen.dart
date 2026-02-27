@@ -1,18 +1,18 @@
 ﻿import 'package:core/di/di.dart';
 import 'package:core/helper/spacer.dart';
-import 'package:sandwich_app/core/routing/screens_names.dart';
+import 'package:monorepo_template/core/routing/screens_names.dart';
 import 'package:shared/styles/fonts/app_text_styles.dart';
 import 'package:shared/widgets/text_field/phone_number_widget.dart';
 import 'package:shared/widgets/toast/app_toast.dart';
-import 'package:sandwich_app/features/register_screen/logic/cubit/register_cubit.dart';
-import 'package:sandwich_app/features/register_screen/logic/cubit/register_state.dart';
-import 'package:sandwich_app/features/register_screen/ui/widgets/build_register_button.dart';
-import 'package:sandwich_app/features/register_screen/ui/widgets/register_confirm_password_field.dart';
-import 'package:sandwich_app/features/register_screen/ui/widgets/register_gender_selection.dart';
-import 'package:sandwich_app/features/register_screen/ui/widgets/register_password_field.dart';
-import 'package:sandwich_app/features/register_screen/ui/widgets/register_password_requirements.dart';
-import 'package:sandwich_app/features/register_screen/ui/widgets/register_terms_and_conditions_checkbox.dart';
-import 'package:sandwich_app/features/register_screen/ui/widgets/register_user_name_field.dart';
+import 'package:monorepo_template/features/register_screen/logic/cubit/register_cubit.dart';
+import 'package:monorepo_template/features/register_screen/logic/cubit/register_state.dart';
+import 'package:monorepo_template/features/register_screen/ui/widgets/build_register_button.dart';
+import 'package:monorepo_template/features/register_screen/ui/widgets/register_confirm_password_field.dart';
+import 'package:monorepo_template/features/register_screen/ui/widgets/register_gender_selection.dart';
+import 'package:monorepo_template/features/register_screen/ui/widgets/register_password_field.dart';
+import 'package:monorepo_template/features/register_screen/ui/widgets/register_password_requirements.dart';
+import 'package:monorepo_template/features/register_screen/ui/widgets/register_terms_and_conditions_checkbox.dart';
+import 'package:monorepo_template/features/register_screen/ui/widgets/register_user_name_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -128,4 +128,3 @@ class RegisterScreen extends StatelessWidget {
     return Text("إنشاء حساب", style: AppTextStyles().fontGoldDark20Bold);
   }
 }
-

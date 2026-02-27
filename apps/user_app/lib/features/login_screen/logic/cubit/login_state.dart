@@ -1,5 +1,5 @@
 ﻿import 'package:core/network/error/error_model.dart';
-import 'package:sandwich_app/features/login_screen/logic/models/login_model_res.dart';
+import 'package:monorepo_template/features/login_screen/logic/models/login_model_res.dart';
 
 sealed class LoginState {}
 
@@ -18,4 +18,3 @@ final class LoginSuccessState extends LoginState {
   final LoginModelResponse loginModelResponse;
   LoginSuccessState(this.loginModelResponse);
 }
-

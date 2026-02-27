@@ -2,11 +2,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "dev",
+            "name": "user dev",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",
-            "program": "apps/sandwich_app/lib/main_development.dart",
+            "program": "lib/main_development.dart",
+            "cwd": "apps/user_app",
             "args": [
                 "--flavor",
                 "dev",
@@ -14,15 +15,40 @@
             ]
         },
         {
-            "name": "pro",
+            "name": "user pro",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",
-            "program": "apps/sandwich_app/lib/main_production.dart",
+            "program": "lib/main_production.dart",
+            "cwd": "apps/user_app",
             "args": [
                 "--flavor",
                 "pro",
                 // "--dart-define=FIREBASE_APP_ID=1:984265725563:android:053503d3bcb20af1d8f4de"
+            ]
+        },
+        {
+            "name": "admin dev",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "lib/main_development.dart",
+            "cwd": "apps/admin_app",
+            "args": [
+                "--flavor",
+                "dev"
+            ]
+        },
+        {
+            "name": "admin pro",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "lib/main_production.dart",
+            "cwd": "apps/admin_app",
+            "args": [
+                "--flavor",
+                "pro"
             ]
         }
     ]

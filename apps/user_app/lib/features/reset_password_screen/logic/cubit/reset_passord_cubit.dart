@@ -1,6 +1,6 @@
-import 'package:sandwich_app/features/reset_password_screen/logic/cubit/reset_passord_state.dart';
-import 'package:sandwich_app/features/reset_password_screen/logic/models/reset_password_req.dart';
-import 'package:sandwich_app/features/reset_password_screen/logic/repo/reset_password_repo.dart';
+import 'package:monorepo_template/features/reset_password_screen/logic/cubit/reset_passord_state.dart';
+import 'package:monorepo_template/features/reset_password_screen/logic/models/reset_password_req.dart';
+import 'package:monorepo_template/features/reset_password_screen/logic/repo/reset_password_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';

@@ -5,8 +5,8 @@ import 'package:shared/styles/fonts/app_text_styles.dart';
 import 'package:shared/widgets/buttons/app_header.dart';
 import 'package:shared/widgets/buttons/app_button.dart';
 import 'package:shared/widgets/toast/app_toast.dart';
-import 'package:sandwich_app/features/otp_screen/logic/cubit/otp_cubit.dart';
-import 'package:sandwich_app/features/otp_screen/logic/cubit/otp_state.dart';
+import 'package:monorepo_template/features/otp_screen/logic/cubit/otp_cubit.dart';
+import 'package:monorepo_template/features/otp_screen/logic/cubit/otp_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -174,4 +174,3 @@ class OtpScreen extends StatelessWidget {
     );
   }
 }
-

@@ -2,9 +2,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:core/local/secure_storage_helper.dart';
 import 'package:core/local/shared_prefrence.dart';
-import 'package:sandwich_app/features/login_screen/logic/cubit/login_state.dart';
-import 'package:sandwich_app/features/login_screen/logic/models/login_model_req.dart';
-import 'package:sandwich_app/features/login_screen/logic/repo/login_repo.dart';
+import 'package:monorepo_template/features/login_screen/logic/cubit/login_state.dart';
+import 'package:monorepo_template/features/login_screen/logic/models/login_model_req.dart';
+import 'package:monorepo_template/features/login_screen/logic/repo/login_repo.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -68,4 +68,3 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 }
-

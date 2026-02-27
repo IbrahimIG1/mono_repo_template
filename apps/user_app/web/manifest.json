@@ -1,6 +1,6 @@
 {
-    "name": "sandwich_app",
-    "short_name": "sandwich_app",
+    "name": "monorepo_template",
+    "short_name": "monorepo_template",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

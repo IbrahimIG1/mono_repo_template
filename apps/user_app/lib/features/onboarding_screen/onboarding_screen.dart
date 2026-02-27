@@ -3,10 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:core/helper/extension.dart';
 import 'package:core/helper/get_user_token.dart';
 import 'package:core/local/shared_prefrence.dart';
-import 'package:sandwich_app/core/routing/screens_names.dart';
+import 'package:monorepo_template/core/routing/screens_names.dart';
 import 'package:shared/styles/colors/colors.dart';
 import 'package:shared/styles/fonts/app_text_styles.dart';
-import 'package:sandwich_app/features/onboarding_screen/widget/onboarding_widget.dart';
+import 'package:monorepo_template/features/onboarding_screen/widget/onboarding_widget.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -117,4 +117,3 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 }
-

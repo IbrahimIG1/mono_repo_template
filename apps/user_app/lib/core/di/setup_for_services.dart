@@ -3,9 +3,9 @@ import 'package:core/di/di.dart';
 import 'package:core/network/api_sevices/api_services.dart';
 import 'package:core/network/api_sevices/dio_factory.dart';
 import 'package:flutter/material.dart';
-import 'package:sandwich_app/app_navigation.dart';
-import 'package:sandwich_app/features/notifications_screen/logic/notification_factory.dart';
-import 'package:sandwich_app/core/routing/screens_names.dart';
+import 'package:monorepo_template/app_navigation.dart';
+import 'package:monorepo_template/features/notifications_screen/logic/notification_factory.dart';
+import 'package:monorepo_template/core/routing/screens_names.dart';
 
 class SetupForServices {
   static Future<void> setupForServices() async {

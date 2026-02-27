@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:core/network/error/dio_error_handler.dart';
 import 'package:core/network/error/error_model.dart';
 import 'package:core/network/error/firebase_handeler.dart';
-import 'package:sandwich_app/features/notifications_screen/ui/widgets/notification_item/notiification_toast.dart';
+import 'package:monorepo_template/features/notifications_screen/ui/widgets/notification_item/notiification_toast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -74,4 +74,3 @@ class NotificationFactory {
     _firebaseMessaging.onTokenRefresh.listen(callback);
   }
 }
-

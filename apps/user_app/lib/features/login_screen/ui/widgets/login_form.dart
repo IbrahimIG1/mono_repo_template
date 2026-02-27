@@ -1,7 +1,7 @@
 ﻿import 'package:core/helper/spacer.dart';
 import 'package:shared/widgets/text_field/app_text_form_feild.dart';
 import 'package:shared/widgets/text_field/phone_number_widget.dart';
-import 'package:sandwich_app/features/login_screen/logic/cubit/login_cubit.dart';
+import 'package:monorepo_template/features/login_screen/logic/cubit/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -32,4 +32,3 @@ Widget loginFormFeilds(LoginCubit cubit) => Column(
     ),
   ],
 );
-

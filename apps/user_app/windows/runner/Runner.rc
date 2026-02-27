@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "sandwich_app" "\0"
+            VALUE "FileDescription", "monorepo_template" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "sandwich_app" "\0"
+            VALUE "InternalName", "monorepo_template" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "sandwich_app.exe" "\0"
-            VALUE "ProductName", "sandwich_app" "\0"
+            VALUE "OriginalFilename", "monorepo_template.exe" "\0"
+            VALUE "ProductName", "monorepo_template" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

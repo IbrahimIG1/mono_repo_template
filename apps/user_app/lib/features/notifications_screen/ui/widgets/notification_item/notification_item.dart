@@ -1,11 +1,11 @@
 ﻿import 'package:core/helper/format_time.dart';
 import 'package:core/helper/spacer.dart';
 import 'package:shared/styles/fonts/app_text_styles.dart';
-import 'package:sandwich_app/features/notifications_screen/logic/cubit/notification_cubit.dart';
-import 'package:sandwich_app/features/notifications_screen/logic/models/notification_model.dart';
-import 'package:sandwich_app/features/notifications_screen/ui/widgets/notification_item/notification_item_name_and_unread_num.dart';
-import 'package:sandwich_app/features/notifications_screen/ui/widgets/notification_item/notification_item_profile_image.dart';
-import 'package:sandwich_app/features/notifications_screen/ui/widgets/notification_item/notification_item_time_and_delete_icon.dart';
+import 'package:monorepo_template/features/notifications_screen/logic/cubit/notification_cubit.dart';
+import 'package:monorepo_template/features/notifications_screen/logic/models/notification_model.dart';
+import 'package:monorepo_template/features/notifications_screen/ui/widgets/notification_item/notification_item_name_and_unread_num.dart';
+import 'package:monorepo_template/features/notifications_screen/ui/widgets/notification_item/notification_item_profile_image.dart';
+import 'package:monorepo_template/features/notifications_screen/ui/widgets/notification_item/notification_item_time_and_delete_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -65,4 +65,3 @@ class NotificationItem extends StatelessWidget {
     );
   }
 }
-

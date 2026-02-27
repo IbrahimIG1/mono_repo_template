@@ -6,7 +6,7 @@ import 'package:core/network/api_sevices/api_services.dart';
 import 'package:core/network/error/dio_error_handler.dart';
 import 'package:core/network/error/error_model.dart';
 import 'package:core/network/urls/api_constants%20.dart';
-import 'package:sandwich_app/features/notifications_screen/logic/models/notification_model.dart';
+import 'package:monorepo_template/features/notifications_screen/logic/models/notification_model.dart';
 
 class NotificationRepo {
   final ApiServices apiServices;
@@ -102,4 +102,3 @@ class NotificationRepo {
     }
   }
 }
-

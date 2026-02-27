@@ -1,13 +1,13 @@
 ﻿import 'package:core/di/di.dart';
 import 'package:core/helper/app_images.dart';
 import 'package:core/helper/spacer.dart';
-import 'package:sandwich_app/core/routing/screens_names.dart';
+import 'package:monorepo_template/core/routing/screens_names.dart';
 import 'package:shared/widgets/toast/app_toast.dart';
-import 'package:sandwich_app/features/login_screen/logic/cubit/login_cubit.dart';
-import 'package:sandwich_app/features/login_screen/logic/cubit/login_state.dart';
-import 'package:sandwich_app/features/login_screen/ui/widgets/forget_password.dart';
-import 'package:sandwich_app/features/login_screen/ui/widgets/login_button.dart';
-import 'package:sandwich_app/features/login_screen/ui/widgets/login_form.dart';
+import 'package:monorepo_template/features/login_screen/logic/cubit/login_cubit.dart';
+import 'package:monorepo_template/features/login_screen/logic/cubit/login_state.dart';
+import 'package:monorepo_template/features/login_screen/ui/widgets/forget_password.dart';
+import 'package:monorepo_template/features/login_screen/ui/widgets/login_button.dart';
+import 'package:monorepo_template/features/login_screen/ui/widgets/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -86,4 +86,3 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
-

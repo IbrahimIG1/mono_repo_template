@@ -4,7 +4,7 @@ import 'package:core/network/api_sevices/api_services.dart';
 import 'package:core/network/error/dio_error_handler.dart';
 import 'package:core/network/error/error_model.dart';
 import 'package:core/network/urls/api_constants%20.dart';
-import 'package:sandwich_app/features/otp_screen/logic/repo/otp_repo.dart';
+import 'package:monorepo_template/features/otp_screen/logic/repo/otp_repo.dart';
 
 class ForgetPasswordRepo extends OtpRepo {
   @override
@@ -45,4 +45,3 @@ class ForgetPasswordRepo extends OtpRepo {
     }
   }
 }
-

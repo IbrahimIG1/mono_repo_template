@@ -1,6 +1,6 @@
-import 'package:sandwich_app/features/register_screen/logic/cubit/register_state.dart';
-import 'package:sandwich_app/features/register_screen/logic/model/register_model_req.dart';
-import 'package:sandwich_app/features/register_screen/logic/repo/register_repo.dart';
+import 'package:monorepo_template/features/register_screen/logic/cubit/register_state.dart';
+import 'package:monorepo_template/features/register_screen/logic/model/register_model_req.dart';
+import 'package:monorepo_template/features/register_screen/logic/repo/register_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';

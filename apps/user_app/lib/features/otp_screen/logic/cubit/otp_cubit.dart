@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:sandwich_app/features/otp_screen/logic/repo/otp_repo.dart';
+import 'package:monorepo_template/features/otp_screen/logic/repo/otp_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'otp_state.dart';

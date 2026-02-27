@@ -6,12 +6,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:core/helper/extension.dart';
 import 'package:core/local/secure_storage_helper.dart';
 import 'package:core/local/shared_prefrence.dart';
-import 'package:sandwich_app/app_navigation.dart';
-import 'package:sandwich_app/core/di/app_dependencies.dart';
-import 'package:sandwich_app/core/routing/generate_route.dart';
-import 'package:sandwich_app/core/routing/screens_names.dart';
-import 'package:sandwich_app/features/language_screen/logic/language_cubit.dart';
-import 'package:sandwich_app/generated/l10n.dart';
+import 'package:monorepo_template/app_navigation.dart';
+import 'package:monorepo_template/core/di/app_dependencies.dart';
+import 'package:monorepo_template/core/routing/generate_route.dart';
+import 'package:monorepo_template/core/routing/screens_names.dart';
+import 'package:monorepo_template/features/language_screen/logic/language_cubit.dart';
+import 'package:monorepo_template/generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,8 +52,9 @@ class MyApp extends StatelessWidget {
                   onGenerateRoute: AppRoutes.generateRoute,
                   initialRoute:
                       token.isNullOrEmpty()
-                          ? ScreensNames.login
-                          : ScreensNames.home,
+                          ? ScreensNames
+                              .layoutScreen //* TODO: make it login when login screen is ready
+                          : ScreensNames.layoutScreen,
                 );
               },
             ),
@@ -61,4 +62,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

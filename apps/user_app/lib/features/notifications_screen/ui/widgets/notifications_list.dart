@@ -1,6 +1,6 @@
-import 'package:sandwich_app/features/notifications_screen/logic/cubit/notification_cubit.dart';
-import 'package:sandwich_app/features/notifications_screen/logic/models/notification_model.dart';
-import 'package:sandwich_app/features/notifications_screen/ui/widgets/notification_item/notification_item.dart';
+import 'package:monorepo_template/features/notifications_screen/logic/cubit/notification_cubit.dart';
+import 'package:monorepo_template/features/notifications_screen/logic/models/notification_model.dart';
+import 'package:monorepo_template/features/notifications_screen/ui/widgets/notification_item/notification_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

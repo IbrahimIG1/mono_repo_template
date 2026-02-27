@@ -4,7 +4,7 @@ import 'package:core/network/api_sevices/api_services.dart';
 import 'package:core/network/error/dio_error_handler.dart';
 import 'package:core/network/error/error_model.dart';
 import 'package:core/network/urls/api_constants%20.dart';
-import 'package:sandwich_app/features/reset_password_screen/logic/models/reset_password_req.dart';
+import 'package:monorepo_template/features/reset_password_screen/logic/models/reset_password_req.dart';
 
 class ResetPasswordRepo {
   final ApiServices apiServices;
@@ -44,4 +44,3 @@ class ResetPasswordRepo {
     }
   }
 }
-

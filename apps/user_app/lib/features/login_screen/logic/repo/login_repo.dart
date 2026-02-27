@@ -4,8 +4,8 @@ import 'package:core/network/api_sevices/api_services.dart';
 import 'package:core/network/error/dio_error_handler.dart';
 import 'package:core/network/error/error_model.dart';
 import 'package:core/network/urls/api_constants%20.dart';
-import 'package:sandwich_app/features/login_screen/logic/models/login_model_req.dart';
-import 'package:sandwich_app/features/login_screen/logic/models/login_model_res.dart';
+import 'package:monorepo_template/features/login_screen/logic/models/login_model_req.dart';
+import 'package:monorepo_template/features/login_screen/logic/models/login_model_res.dart';
 
 class LoginRepo {
   final ApiServices apiServices;
@@ -66,4 +66,3 @@ ErrorModel? handleErrorResponse(Map<String, dynamic> responseData) {
   }
   return null; // Return null if the response doesn't match the error structure
 }
-
