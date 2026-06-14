@@ -85,24 +85,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         skip: Text("تخطي", style: AppTextStyles().fontBlack12SemiBold),
         skipStyle: TextButton.styleFrom(
           padding: EdgeInsets.zero,
-          backgroundColor: AppColors().goldDark,
+          backgroundColor: AppColors().mainColorSecondDark,
           minimumSize: Size.zero,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         next: Icon(Icons.arrow_forward, color: AppColors().white, size: 16),
         nextStyle: IconButton.styleFrom(
           padding: EdgeInsets.zero,
-          backgroundColor: AppColors().goldDark,
+          backgroundColor: AppColors().mainColorSecondDark,
           minimumSize: const Size(24, 24),
         ),
         done: Text("تم", style: AppTextStyles().fontBlack12SemiBold),
         doneStyle: TextButton.styleFrom(
           padding: EdgeInsets.zero,
-          backgroundColor: AppColors().goldDark,
+          backgroundColor: AppColors().mainColorSecondDark,
           minimumSize: Size.zero,
         ),
         dotsDecorator: DotsDecorator(
-          activeColor: AppColors().goldDark,
+          activeColor: AppColors().mainColorSecondDark,
           size: Size(7.w, 7.h),
           color: Colors.black26,
           activeSize: Size(15.w, 7.h),

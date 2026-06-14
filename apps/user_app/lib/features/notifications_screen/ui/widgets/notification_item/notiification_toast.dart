@@ -10,9 +10,8 @@ Future<bool?> notificationsUi(RemoteMessage message) {
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.TOP,
     timeInSecForIosWeb: 3,
-    backgroundColor: AppColors().goldNormalLight,
+    backgroundColor: AppColors().mainColor,
     textColor: Colors.white,
     fontSize: 16.0.sp,
   );
 }
-

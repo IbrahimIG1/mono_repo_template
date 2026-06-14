@@ -42,7 +42,7 @@ class ChangeLangScreenBody extends StatelessWidget {
                       const SizedBox(width: 5), // Reduce space manually
                       Radio<String>(
                         toggleable: false,
-                        activeColor: AppColors().goldDark,
+                        activeColor: AppColors().mainColorSecondDark,
                         value: 'ar',
                         groupValue:
                             SharedPreferencesHelper.getString(
@@ -75,7 +75,7 @@ class ChangeLangScreenBody extends StatelessWidget {
                       const SizedBox(width: 5), // Reduce space manually
                       Radio<String>(
                         toggleable: false,
-                        activeColor: AppColors().goldDark,
+                        activeColor: AppColors().mainColorSecondDark,
                         value: 'en',
                         groupValue:
                             SharedPreferencesHelper.getString(

@@ -20,7 +20,7 @@ Widget appDefaultButton({
       decoration: BoxDecoration(
         border: border,
         borderRadius: BorderRadius.all(Radius.circular(7.r)),
-        color: color ?? AppColors().goldNormalLight,
+        color: color ?? AppColors().mainColor,
       ),
 
       child: MaterialButton(
@@ -40,4 +40,3 @@ Widget appDefaultButton({
     ),
   );
 }
-

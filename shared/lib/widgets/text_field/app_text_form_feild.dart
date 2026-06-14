@@ -57,7 +57,7 @@ class AppTextFormFeild extends StatelessWidget {
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      cursorColor: AppColors().goldNormalLight,
+      cursorColor: AppColors().mainColor,
 
       onTap: onTap,
       autofocus: autofocus ?? false,
@@ -89,7 +89,7 @@ class AppTextFormFeild extends StatelessWidget {
           borderRadius: BorderRadius.circular(7.r),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors().goldNormalLight),
+          borderSide: BorderSide(color: AppColors().mainColor),
           borderRadius: BorderRadius.circular(7.r),
         ),
         errorBorder: OutlineInputBorder(
@@ -105,4 +105,3 @@ class AppTextFormFeild extends StatelessWidget {
     );
   }
 }
-

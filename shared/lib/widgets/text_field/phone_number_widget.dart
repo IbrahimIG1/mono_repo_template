@@ -14,7 +14,7 @@ Widget phoneNumberField({
     child: InternationalPhoneNumberInput(
       autoValidateMode: AutovalidateMode.onUserInteraction,
       countries: ['SA', "EG"],
-      cursorColor: AppColors().goldNormalDark,
+      cursorColor: AppColors().mainColorDark,
       onInputChanged: (value) {
         getPhoneNumber(value);
       },
@@ -40,7 +40,7 @@ Widget phoneNumberField({
           borderRadius: BorderRadius.circular(7.r),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors().goldNormalLight),
+          borderSide: BorderSide(color: AppColors().mainColor),
           borderRadius: BorderRadius.circular(7.r),
         ),
         errorBorder: OutlineInputBorder(
@@ -61,4 +61,3 @@ Widget phoneNumberField({
     ),
   );
 }
-

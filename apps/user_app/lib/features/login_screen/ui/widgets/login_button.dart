@@ -19,7 +19,7 @@ Widget loginButton({
     fallback:
         (context) => Center(
           child: CircularProgressIndicator(
-            backgroundColor: AppColors().goldNormalLight,
+            backgroundColor: AppColors().mainColor,
             color: AppColors().white,
           ),
         ),
@@ -29,7 +29,7 @@ Widget loginButton({
             width: 335.w,
             height: 50.h,
             child: appDefaultButton(
-              color: AppColors().goldNormalLight,
+              color: AppColors().mainColor,
               titleStyle: AppTextStyles().fontWhite16Bold,
               text: "تسجيل دخول",
               onPressed: () {

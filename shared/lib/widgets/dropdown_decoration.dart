@@ -8,16 +8,16 @@ InputDecoration appDropDownDecoration() {
     isDense: true,
     floatingLabelStyle: AppTextStyles().fontGold12Meduim,
 
-    suffixIconColor: AppColors().goldNormalLight,
-    prefixIconColor: AppColors().goldNormalLight,
+    suffixIconColor: AppColors().mainColor,
+    prefixIconColor: AppColors().mainColor,
     filled: true,
     fillColor: AppColors().white,
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: AppColors().goldNormalLight),
+      borderSide: BorderSide(color: AppColors().mainColor),
       borderRadius: BorderRadius.circular(7.r),
     ),
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: AppColors().goldNormalLight),
+      borderSide: BorderSide(color: AppColors().mainColor),
       borderRadius: BorderRadius.circular(7.r),
     ),
     errorBorder: OutlineInputBorder(
@@ -30,4 +30,3 @@ InputDecoration appDropDownDecoration() {
     ),
   );
 }
-

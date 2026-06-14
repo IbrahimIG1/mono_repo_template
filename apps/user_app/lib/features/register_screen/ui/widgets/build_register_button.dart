@@ -40,7 +40,7 @@ Widget buildRegisterButton({
           width: 335.w,
           height: 50.h,
           child: appDefaultButton(
-            color: AppColors().goldNormalLight,
+            color: AppColors().mainColor,
             child: ConditionalBuilder(
               condition: state is RegisterLoadingState, //* Change it to state
               builder:

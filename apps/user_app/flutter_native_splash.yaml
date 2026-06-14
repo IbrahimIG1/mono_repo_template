@@ -1,9 +1,0 @@
-## Run This Command to Generate Splash Screen: dart run flutter_native_splash:create
-
-flutter_native_splash:
-  color: "#ffffff"
-  
-  image: assets/images/splash2.png
-  android_12:
-    image: assets/images/splash12.png
-    color: "#ffffff"

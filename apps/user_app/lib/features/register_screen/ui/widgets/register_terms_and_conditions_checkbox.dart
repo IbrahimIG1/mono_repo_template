@@ -11,9 +11,9 @@ Widget registerTermsAndConditionsCheckbox(
   return Row(
     children: [
       Checkbox(
-        side: BorderSide(color: AppColors().goldDark),
+        side: BorderSide(color: AppColors().mainColorSecondDark),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        activeColor: AppColors().goldDark,
+        activeColor: AppColors().mainColorSecondDark,
         value: cubit.isTermsConfirmed,
         onChanged: (bool? value) {
           cubit.changeTermsConfirmed(value);
@@ -40,9 +40,9 @@ Widget registerCommitmentCheckbox(RegisterCubit cubit) {
   return Row(
     children: [
       Checkbox(
-        side: BorderSide(color: AppColors().goldDark),
+        side: BorderSide(color: AppColors().mainColorSecondDark),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        activeColor: AppColors().goldDark,
+        activeColor: AppColors().mainColorSecondDark,
         value: cubit.isCommitmentConfirmed,
         onChanged: (bool? value) {
           cubit.changeCommitmentConfirmed(value);

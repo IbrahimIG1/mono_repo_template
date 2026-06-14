@@ -108,7 +108,7 @@ class ResetPasswordScreen extends StatelessWidget {
                           ),
                           verticalSpace(24.h),
                           appDefaultButton(
-                            color: AppColors().goldNormalLight,
+                            color: AppColors().mainColor,
                             titleStyle: AppTextStyles().fontWhite16Bold,
                             text: "إرسال",
                             onPressed: () {

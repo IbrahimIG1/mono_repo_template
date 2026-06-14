@@ -47,12 +47,10 @@ Widget _buildGenderOption({
       width: 167.5.w,
       height: 35.h,
       decoration: BoxDecoration(
-        color: isSelected ? AppColors().goldNormalLight : null,
+        color: isSelected ? AppColors().mainColor : null,
         border: Border.all(
           color:
-              isSelected
-                  ? AppColors().goldNormalLight
-                  : AppColors().greyNormalHover,
+              isSelected ? AppColors().mainColor : AppColors().greyNormalHover,
         ),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(topLeftRaduis ?? 0),
@@ -65,7 +63,7 @@ Widget _buildGenderOption({
         child: Text(
           label,
           style: AppTextStyles().fontGrey14Bold.copyWith(
-            color: isSelected ? AppColors().white : AppColors().goldNormalLight,
+            color: isSelected ? AppColors().white : AppColors().mainColor,
           ),
         ),
       ),

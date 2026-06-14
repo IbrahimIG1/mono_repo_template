@@ -20,122 +20,122 @@ class AppTextStyles {
   //* Gold Light
   TextStyle fontGold12Meduim = TextStyle(
     fontSize: 12.sp,
-    color: AppColors().goldNormalLight,
+    color: AppColors().mainColor,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.medium,
   );
   TextStyle fontGold12Bold = TextStyle(
     fontSize: 12.sp,
-    color: AppColors().goldNormalLight,
+    color: AppColors().mainColor,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.bold,
   );
   TextStyle fontGold12SimiBold = TextStyle(
     fontSize: 12.sp,
-    color: AppColors().goldNormalLight,
+    color: AppColors().mainColor,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.semiBold,
   );
   TextStyle fontGold14Meduim = TextStyle(
     fontSize: 14.sp,
-    color: AppColors().goldNormalLight,
+    color: AppColors().mainColor,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.medium,
   );
   TextStyle fontGold14Bold = TextStyle(
     fontSize: 14.sp,
-    color: AppColors().goldNormalLight,
+    color: AppColors().mainColor,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.bold,
   );
   TextStyle fontGold14Regular = TextStyle(
     fontSize: 14.sp,
-    color: AppColors().goldNormalLight,
+    color: AppColors().mainColor,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.regular,
   );
   TextStyle fontGold16Meduim = TextStyle(
     fontSize: 16.sp,
-    color: AppColors().goldNormalLight,
+    color: AppColors().mainColor,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.medium,
   );
   TextStyle fontGold16Bold = TextStyle(
     fontSize: 16.sp,
-    color: AppColors().goldNormalLight,
+    color: AppColors().mainColor,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.bold,
   );
   TextStyle fontGold20Bold = TextStyle(
     fontSize: 20.sp,
-    color: AppColors().goldNormalLight,
+    color: AppColors().mainColor,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.bold,
   );
   //* Gold Dark
   TextStyle fontGoldDark12Bold = TextStyle(
     fontSize: 12.sp,
-    color: AppColors().goldDark,
+    color: AppColors().mainColorSecondDark,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.bold,
   );
   TextStyle fontGoldDark14Meduim = TextStyle(
     fontSize: 14.sp,
-    color: AppColors().goldDark,
+    color: AppColors().mainColorSecondDark,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.medium,
   );
   TextStyle fontGoldDark14Regular = TextStyle(
     fontSize: 14.sp,
-    color: AppColors().goldDark,
+    color: AppColors().mainColorSecondDark,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.regular,
   );
   TextStyle fontGoldDark14Bold = TextStyle(
     fontSize: 14.sp,
-    color: AppColors().goldDark,
+    color: AppColors().mainColorSecondDark,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.bold,
   );
   TextStyle fontGoldDark12Meduim = TextStyle(
     fontSize: 12.sp,
-    color: AppColors().goldDark,
+    color: AppColors().mainColorSecondDark,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.medium,
   );
   TextStyle fontGoldDark12Regular = TextStyle(
     fontSize: 12.sp,
-    color: AppColors().goldDark,
+    color: AppColors().mainColorSecondDark,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.regular,
   );
   TextStyle fontGoldDark20Bold = TextStyle(
     fontSize: 20.sp,
-    color: AppColors().goldDark,
+    color: AppColors().mainColorSecondDark,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.bold,
   );
   TextStyle fontGoldDark24Bold = TextStyle(
     fontSize: 24.sp,
-    color: AppColors().goldDark,
+    color: AppColors().mainColorSecondDark,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.bold,
   );
   TextStyle fontGoldDark16Meduim = TextStyle(
     fontSize: 16.sp,
-    color: AppColors().goldDark,
+    color: AppColors().mainColorSecondDark,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.medium,
   );
   TextStyle fontGoldDark16Bold = TextStyle(
     fontSize: 16.sp,
-    color: AppColors().goldDark,
+    color: AppColors().mainColorSecondDark,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.bold,
   );
   TextStyle fontGoldDark18Bold = TextStyle(
     fontSize: 18.sp,
-    color: AppColors().goldDark,
+    color: AppColors().mainColorSecondDark,
     fontFamily: AppFontFamily.plex,
     fontWeight: AppFontWeights.bold,
   );
@@ -235,4 +235,3 @@ class AppTextStyles {
     fontWeight: AppFontWeights.bold,
   );
 }
-
