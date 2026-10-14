@@ -1,6 +1,6 @@
 # Goal 2: Five-Day Technical Spike
 
-Status: in progress; local probes passed, CI results remain `VERIFY`.
+Status: complete; local probes and the final CI run passed.
 
 Spike branch: `v2/goal-2-spike`
 
@@ -20,7 +20,7 @@ The estimate and timebox are exactly five working days. Finishing an experiment 
 
 ## Disposable spike boundary
 
-The following exist only to collect evidence and must be removed at spike close:
+The following existed only to collect evidence and were removed at spike close:
 
 - root spike `pubspec.yaml` and `pubspec.lock`;
 - `spikes/goal2/scratch_package`;
@@ -28,7 +28,7 @@ The following exist only to collect evidence and must be removed at spike close:
 - `spikes/goal2/websocket_probe_server.dart`;
 - the spike-only GitHub Actions workflow.
 
-The exact SDK pin and accepted architecture/tooling decisions may remain. Any retained runner must be explicitly adopted rather than left behind by accident.
+The exact SDK pin, evidence and accepted architecture/tooling decisions remain. `tool/workspace.dart` is retained intentionally as the adopted runner; it becomes active when Goal 3 creates the production workspace.
 
 ## Candidate toolchain and dependency resolution
 
@@ -119,7 +119,7 @@ Decision: browser adapters must not require an `Authorization` handshake header.
 | Android | `flutter build apk --debug --no-pub` | PASS |
 | Web | `flutter build web --release --no-pub` | PASS, including Wasm dry run |
 | Windows | `flutter build windows --release --no-pub` | PASS |
-| iOS | macOS CI command | VERIFY |
+| iOS | `flutter build ios --release --no-codesign --no-pub` in macOS CI | PASS |
 
 ## Melos decision
 
@@ -131,7 +131,7 @@ Decision: reject Melos for V2. The dependency was removed after the comparison. 
 
 ## CI pass/fail and fallbacks
 
-The spike workflow has independent Android, iOS, Web and Windows matrix executions plus Web/Windows runtime probes.
+The spike workflow had independent Android, iOS, Web and Windows matrix executions plus Web/Windows runtime probes.
 
 | Gate | Pass | Failure fallback |
 |---|---|---|
@@ -144,4 +144,25 @@ The spike workflow has independent Android, iOS, Web and Windows matrix executio
 | Runtime storage probes | Real plugin round trip succeeds | Use an app-owned unsupported adapter or reassess plugin; never silently use plaintext |
 | Browser WebSocket | Server accepts one-time ticket and records Origin | Same-origin secure-cookie design or capability Unsupported until backend contract exists |
 
-CI results and run URLs remain `VERIFY` until the branch is pushed and GitHub Actions completes.
+## Final CI evidence
+
+The final workflow run [`38650773768`](https://github.com/IbrahimIG1/mono_repo_template/actions/runs/38650773768) completed successfully against commit `6763b3c`.
+
+| Job | Result |
+|---|---|
+| Workspace, tests, and routes | PASS |
+| Build Android | PASS |
+| Build iOS, no codesign | PASS |
+| Build Web | PASS |
+| Build Windows | PASS |
+| Windows secure-storage runtime | PASS |
+| Web secure-storage and WebSocket runtime | PASS |
+
+An earlier Web runtime attempt launched the Chrome device without an X server and failed before executing the probes. The final workflow followed Flutter's documented headless route with `-d web-server`; the same command passed locally and in CI. This was a CI launch correction, not an approved capability fallback.
+
+## Cleanup result
+
+- Removed the scratch package, scratch app, probe server, temporary root workspace/lockfile and spike-only workflow.
+- Removed ignored local builds, downloaded ChromeDriver and probe logs.
+- Retained `.fvmrc`, this evidence, ADR-005 and `tool/workspace.dart` deliberately.
+- No scratch app/package is an input to Goal 3.

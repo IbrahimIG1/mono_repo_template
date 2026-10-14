@@ -1,6 +1,6 @@
 # ADR-005: Toolchain, Workspace, and Task Runner
 
-Status: Accepted by local spike; four-platform CI remains `VERIFY`.
+Status: Accepted and verified by local and four-platform CI spike evidence.
 
 ## Decision
 

@@ -1,9 +1,0 @@
-name: mono_repo_template_workspace
-publish_to: none
-
-environment:
-  sdk: ">=3.12.1 <3.13.0"
-
-workspace:
-  - spikes/goal2/scratch_package
-  - spikes/goal2/scratch_app

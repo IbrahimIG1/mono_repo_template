@@ -9,13 +9,14 @@ Read these sources before structural work:
 - `docs/architecture/adr-002-auth-session-and-replay.md`
 - `docs/architecture/adr-003-composition-and-migration.md`
 - `docs/architecture/adr-004-chat-event-boundary.md`
+- `docs/architecture/adr-005-toolchain-workspace-and-runner.md`
 
 ## Current migration boundary
 
-- Goal 1 is audit and decision locking; it does not authorize package extraction.
+- Goals 1 and 2 are complete: repository decisions and tooling/platform assumptions are evidence-backed.
 - Keep existing `core/` and `shared/` paths as compatibility facades.
 - Do not convert `user_app` or `admin_app` in place.
-- New V2 work begins with a new `minimal_app` and new packages after the technical spike.
+- New V2 work begins with admitted production packages and a new `minimal_app`; do not promote the removed scratch code.
 - Chat is V2.1 and must not enter V2 foundation work.
 
 ## Architecture rules

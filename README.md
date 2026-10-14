@@ -10,6 +10,7 @@ Use this template as a base for cloning new apps and accelerating project setup.
 ## V2 migration status
 
 - Start with the [Goal 1 repository audit](docs/migration/v2-goal-1-audit.md).
+- Read the completed [Goal 2 technical-spike evidence](docs/spikes/goal-2-technical-spike.md) before changing the pinned SDK, workspace, typed routes, storage or realtime transport assumptions.
 - Architecture decisions are recorded in [foundation contracts](docs/architecture/adr-001-foundation-contracts.md), [authentication/session behavior](docs/architecture/adr-002-auth-session-and-replay.md), [composition and migration](docs/architecture/adr-003-composition-and-migration.md), and the [chat event boundary](docs/architecture/adr-004-chat-event-boundary.md).
 - Repository-wide working rules live in [AGENTS.md](AGENTS.md); reusable workflows live in `.prompts/` and `skills/`.
 - The first V2 workspace will contain only newly admitted V2 members. Legacy projects join later after their own analyzer, tests, dependency resolution, and required builds pass.
@@ -245,7 +246,6 @@ If you want, I can add a `LICENSE` file (MIT) and open a small PR for it.
 ---
 
 If you want this README to include more specifics (detailed rename scripts, CI/CD examples, or a CONTRIBUTING.md), tell me which sections to expand and I will update the file.
-
 
 
 
