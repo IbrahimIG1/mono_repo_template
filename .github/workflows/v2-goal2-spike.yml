@@ -148,9 +148,8 @@ jobs:
           flutter drive \
             --driver=test_driver/integration_test.dart \
             --target=integration_test/platform_probes_test.dart \
-            -d chrome \
+            -d web-server \
             --no-pub \
-            --web-browser-flag=--headless=new \
             --dart-define=SPIKE_WEBSOCKET_URL=ws://127.0.0.1:9234/socket \
             2>&1 | tee "$RUNNER_TEMP/flutter-drive.log"
           drive_status=${PIPESTATUS[0]}
