@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
@@ -60,7 +60,7 @@ jobs:
             runner: windows-latest
             command: flutter build windows --release --no-pub
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
@@ -77,7 +77,7 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
@@ -95,7 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
@@ -107,7 +107,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          command -v chromedriver || {
+            echo '::error title=ChromeDriver unavailable::chromedriver is not on PATH'
+            exit 1
+          }
           chromedriver --version
+          google-chrome --version || true
           chromedriver --port=4444 --allowed-ips=127.0.0.1 \
             > "$RUNNER_TEMP/chromedriver.log" 2>&1 &
           driver_pid=$!
@@ -117,7 +122,7 @@ jobs:
           trap 'kill "$driver_pid" "$server_pid" 2>/dev/null || true' EXIT
 
           for attempt in {1..100}; do
-            if curl -fsS http://127.0.0.1:4444/status | grep -q '"ready":true'; then
+            if curl -fsS http://127.0.0.1:4444/status | grep -Eq '"ready"[[:space:]]*:[[:space:]]*true'; then
               break
             fi
             sleep 0.1
@@ -129,14 +134,35 @@ jobs:
             sleep 0.1
           done
 
-          curl -fsS http://127.0.0.1:4444/status | grep -q '"ready":true'
-          grep -q '^READY ' "$RUNNER_TEMP/websocket-server.log"
+          if ! curl -fsS http://127.0.0.1:4444/status | grep -Eq '"ready"[[:space:]]*:[[:space:]]*true'; then
+            driver_tail=$(tail -n 20 "$RUNNER_TEMP/chromedriver.log" | tr '\n' ' ')
+            echo "::error title=ChromeDriver readiness failed::$driver_tail"
+            exit 1
+          fi
+          if ! grep -q '^READY ' "$RUNNER_TEMP/websocket-server.log"; then
+            server_tail=$(tail -n 20 "$RUNNER_TEMP/websocket-server.log" | tr '\n' ' ')
+            echo "::error title=WebSocket server readiness failed::$server_tail"
+            exit 1
+          fi
+          set +e
           flutter drive \
             --driver=test_driver/integration_test.dart \
             --target=integration_test/platform_probes_test.dart \
             -d chrome \
             --no-pub \
             --web-browser-flag=--headless=new \
-            --dart-define=SPIKE_WEBSOCKET_URL=ws://127.0.0.1:9234/socket
+            --dart-define=SPIKE_WEBSOCKET_URL=ws://127.0.0.1:9234/socket \
+            2>&1 | tee "$RUNNER_TEMP/flutter-drive.log"
+          drive_status=${PIPESTATUS[0]}
+          set -e
+          if [[ $drive_status -ne 0 ]]; then
+            drive_tail=$(tail -n 30 "$RUNNER_TEMP/flutter-drive.log" | tr '\n' ' ')
+            echo "::error title=Flutter drive failed::$drive_tail"
+            exit "$drive_status"
+          fi
           cat "$RUNNER_TEMP/websocket-server.log"
-          grep -q '^ACCEPT origin=' "$RUNNER_TEMP/websocket-server.log"
+          if ! grep -q '^ACCEPT origin=' "$RUNNER_TEMP/websocket-server.log"; then
+            server_tail=$(tail -n 20 "$RUNNER_TEMP/websocket-server.log" | tr '\n' ' ')
+            echo "::error title=WebSocket ticket was not accepted::$server_tail"
+            exit 1
+          fi
