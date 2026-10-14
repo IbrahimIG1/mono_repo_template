@@ -1,0 +1,4 @@
+interface:
+  display_name: "Monorepo Reuse"
+  short_description: "Find reuse and protect package boundaries"
+  default_prompt: "Use $monorepo to place this Flutter change in the correct app or package."

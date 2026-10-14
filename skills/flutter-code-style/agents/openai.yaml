@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flutter Code Style"
+  short_description: "Keep Dart and Flutter code maintainable"
+  default_prompt: "Use $flutter-code-style to implement this Dart or Flutter change clearly."

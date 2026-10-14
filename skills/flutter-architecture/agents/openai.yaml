@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flutter Architecture"
+  short_description: "Design pragmatic Flutter feature boundaries"
+  default_prompt: "Use $flutter-architecture to design this Flutter feature with pragmatic boundaries."
