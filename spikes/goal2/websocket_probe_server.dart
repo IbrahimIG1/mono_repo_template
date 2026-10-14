@@ -19,7 +19,7 @@ Future<void> main(List<String> arguments) async {
     }
 
     stdout.writeln(
-      'ACCEPT origin=${request.headers.value(HttpHeaders.originHeader) ?? 'none'}',
+      "ACCEPT origin=${request.headers.value('origin') ?? 'none'}",
     );
     final socket = await WebSocketTransformer.upgrade(request);
     socket.listen((message) => socket.add('ack:$message'));

@@ -169,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
+  cupertino_icons:
+    dependency: transitive
+    description:
+      name: cupertino_icons
+      sha256: b7cc2390aac296c083bea762859413eb1cf5b630c70e0c7e4d831018f762a8b2
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   cupertino_ui:
     dependency: transitive
     description:
@@ -592,10 +600,10 @@ packages:
     dependency: transitive
     description:
       name: platform
-      sha256: a36d119c13416516a7b5913fbe8af8531e11633d784c550b2125f76c758524ec
+      sha256: "5d6b1b0036a5f331ebc77c850ebc8506cbc1e9416c27e59b439f917a902a4984"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.0"
+    version: "3.1.6"
   plugin_platform_interface:
     dependency: transitive
     description:
