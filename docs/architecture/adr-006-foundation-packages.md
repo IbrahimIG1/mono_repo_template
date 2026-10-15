@@ -11,7 +11,9 @@ The legacy `core` package combines global networking, global storage, UI helpers
 The first production workspace admits exactly four packages plus `minimal_app`:
 
 - `platform_foundation` is pure Dart and owns sealed `Result<T>`, extensible `AppFailure`, structured logging, and redaction.
-- `networking` is pure Dart and owns HTTP-neutral request/response contracts, typed transport failures, and an injected Dio adapter. Endpoints, auth policy, DTOs, and request replay are excluded.
+- `networking` is pure Dart and owns HTTP-neutral request/response contracts,
+  typed transport failures, an injected Dio adapter, and bounded unauthorized
+  replay. Endpoints, auth models, DTOs, and non-auth retry policy are excluded.
 - `storage` owns typed key-value and secure-string contracts. Shared Preferences and Flutter Secure Storage adapters have separate library entry points; no adapter is global and broad clear operations are intentionally absent.
 - `design_system` owns brand-neutral Material theme tokens and presentation primitives. Product colors, fonts, assets, copy, and localization remain app-owned.
 

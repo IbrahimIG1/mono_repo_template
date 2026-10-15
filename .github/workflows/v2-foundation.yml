@@ -1,12 +1,12 @@
-name: V2 Foundation
+name: V2 Platform
 
 on:
   push:
-    branches: [main, v2/goal-3-foundation]
+    branches: [main, "v2/**"]
   pull_request:
 
 concurrency:
-  group: v2-foundation-${{ github.ref }}
+  group: v2-platform-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

@@ -1,6 +1,6 @@
 # ADR-002: Authentication, Session Ownership, and Request Replay
 
-Status: Accepted for V2 spike and implementation.
+Status: Accepted and implemented in Goal 4.
 
 ## Ownership
 
@@ -46,9 +46,9 @@ The app binds `SignIn<C>` to the matching gateway and session coordinator at its
 
 ```dart
 abstract interface class SessionStore {
-  Future<AuthSession?> read();
-  Future<void> write(AuthSession session);
-  Future<void> clear();
+  Future<Result<AuthSession?>> read();
+  Future<Result<void>> write(AuthSession session);
+  Future<Result<void>> clear();
 }
 
 abstract interface class AccessTokenProvider {
@@ -61,17 +61,29 @@ abstract interface class UnauthorizedRecovery {
   });
 }
 
-abstract interface class SessionManager implements UnauthorizedRecovery {
+final class SessionManager {
   AuthState get current;
   Stream<AuthState> get states;
 
-  Future<void> restore();
-  Future<Result<AuthSession>> establish(AuthSession session);
+  Future<Result<void>> restore();
+  Future<Result<AuthSession>> establish(
+    AuthSession session, {
+    required int expectedGeneration,
+  });
+  Future<Result<String>> recoverAccessToken({
+    required String? failedAccessToken,
+  });
   Future<void> signOut();
 }
 ```
 
-`SessionManager` owns restore, session establishment, serialized refresh and local sign-out. Infrastructure-level session coordination methods are not injected into Cubits; Cubits receive typed use cases.
+`SessionManager` owns restore, session establishment, serialized persistence,
+serialized refresh and local sign-out. It intentionally does not implement a
+networking interface: the app composition root supplies small
+`AccessTokenProvider` and `UnauthorizedRecovery` bridge adapters. This keeps
+`auth_core` and `networking` independent. Infrastructure-level session
+coordination methods are not injected into Cubits; Cubits receive typed use
+cases.
 
 `SessionGateway` is constructor-injected into `SessionManager`. `SignIn<C>` calls its typed `AuthGateway<C>` and, on success, calls `SessionManager.establish`; presentation never receives either gateway. The manager writes a session before publishing it as authenticated.
 
@@ -108,6 +120,10 @@ Repeated `restore()` calls after initialization return without rereading unless 
 
 Every session-changing operation captures a monotonically increasing generation. Sign-out increments it before awaiting any I/O. Results from older generations are discarded and never persisted.
 
+All `SessionStore` operations are serialized. This makes a sign-out clear run
+after any write already in progress, while operations that reach the manager
+after the generation changes are rejected before starting a write.
+
 ## Local-first sign-out
 
 Sign-out order is:
@@ -116,7 +132,8 @@ Sign-out order is:
 2. increment generation and prevent new authenticated work;
 3. clear local session/store;
 4. publish unauthenticated state;
-5. attempt server revocation with the copied token as best effort.
+5. start server revocation with the copied token as monitored best effort,
+   without extending the public sign-out future.
 
 Revocation failure is reported diagnostically but never restores local authentication.
 

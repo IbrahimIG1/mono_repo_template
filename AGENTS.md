@@ -11,13 +11,14 @@ Read these sources before structural work:
 - `docs/architecture/adr-004-chat-event-boundary.md`
 - `docs/architecture/adr-005-toolchain-workspace-and-runner.md`
 - `docs/architecture/adr-006-foundation-packages.md`
+- `docs/architecture/adr-007-auth-and-routing.md`
 
 ## Current migration boundary
 
-- Goals 1 and 2 are complete: repository decisions and tooling/platform assumptions are evidence-backed.
+- Goals 1 through 4 are complete: repository decisions, tooling/platform assumptions, foundation, authentication and typed routing are evidence-backed.
 - Keep existing `core/` and `shared/` paths as compatibility facades.
 - Do not convert `user_app` or `admin_app` in place.
-- New V2 work begins with admitted production packages and a new `minimal_app`; do not promote the removed scratch code.
+- New V2 work extends the admitted production packages and `minimal_app`; do not promote removed scratch code.
 - Chat is V2.1 and must not enter V2 foundation work.
 
 ## Architecture rules
