@@ -18,7 +18,7 @@ Future<void> main() async {
     await _run('flutter', const [
       'create',
       '--empty',
-      '--platforms=web',
+      '--platforms=android,ios',
       '--org=com.example.consumer',
       'consumer_app',
     ], appsDirectory.path);
@@ -27,7 +27,12 @@ Future<void> main() async {
     await _writeMain(appDirectory);
     await _run('flutter', const ['pub', 'get'], temporaryRoot.path);
     await _run('flutter', const ['analyze'], appDirectory.path);
-    await _run('flutter', const ['build', 'web'], appDirectory.path);
+    await _run('flutter', const [
+      'build',
+      'apk',
+      '--debug',
+      '--no-pub',
+    ], appDirectory.path);
     stdout.writeln(
       'PASS: a temporary third app consumed all four foundation packages.',
     );

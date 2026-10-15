@@ -1,6 +1,6 @@
 # ADR-005: Toolchain, Workspace, and Task Runner
 
-Status: Accepted and verified by local and four-platform CI spike evidence.
+Status: Accepted; runner/toolchain evidence remains valid and platform scope is superseded by ADR-008.
 
 ## Decision
 
@@ -20,4 +20,4 @@ See [`Goal 2: Five-Day Technical Spike`](../spikes/goal-2-technical-spike.md).
 - The repository has one dependency resolution for admitted members without pulling legacy conflicts into the initial foundation.
 - CI and local commands use the same member source: Pub itself.
 - The team owns a small amount of runner code instead of a Melos dependency/configuration surface.
-- Flutter upgrades require an explicit pin change, dependency resolution, route regeneration, and four-platform build run.
+- Flutter upgrades require an explicit pin change, dependency resolution, route regeneration, and Android/iOS build runs.

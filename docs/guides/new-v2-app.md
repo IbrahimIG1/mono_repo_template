@@ -5,7 +5,7 @@
 From the repository root:
 
 ```powershell
-flutter create --empty --no-pub --platforms=android,ios,web,windows --org com.example apps/my_app
+flutter create --empty --no-pub --platforms=android,ios --org com.example apps/my_app
 ```
 
 Use the real organization identifier before shipping. The generated identifiers are app-owned.
@@ -59,4 +59,4 @@ dart analyze tool
 dart run tool/check_architecture.dart
 ```
 
-Extend `tool/check_architecture.dart` with the new app and its allowed local edges. Add applicable Android, iOS, Web, and Windows CI builds. A compile pass does not establish runtime support for plugins; update the capability matrix only with matching evidence.
+Extend `tool/check_architecture.dart` with the new app and its allowed local edges. Add applicable Android and iOS CI builds. A compile pass does not establish runtime support for plugins; update the capability matrix only with matching evidence. Keep shared contracts platform-neutral so paused targets can be reconsidered without redesigning them.

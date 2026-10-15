@@ -1,6 +1,6 @@
 # Flutter Platform Working Rules
 
-This repository is migrating from a legacy Flutter template to a modular internal platform for Android, iOS, Web and Windows.
+This repository is migrating from a legacy Flutter template to a modular internal platform targeting Android and iOS. Web and Windows code remains present, but validation and support are paused under ADR-008.
 
 Read these sources before structural work:
 

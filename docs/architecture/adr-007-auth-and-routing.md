@@ -49,7 +49,7 @@ networking --------------------> platform_foundation
   are terminal.
 - The reference backend is deterministic and in-memory; it is not production
   authentication.
-- OS/browser deep-link registration still requires per-platform manual
-  validation. Widget tests prove router policy, not external launch behavior.
+- Android/iOS deep-link registration still requires manual device validation.
+  Widget tests prove router policy, not external launch behavior.
 - Refresh cooldown is process-local. Cross-process coordination is deferred
   until a demonstrated multi-isolate requirement exists.
