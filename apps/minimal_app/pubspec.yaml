@@ -1,5 +1,5 @@
 name: minimal_app
-description: Minimal reference application for the admitted V2 foundation.
+description: Compact V2 integration reference for foundation, auth, and routing.
 publish_to: none
 version: 0.1.0+1
 

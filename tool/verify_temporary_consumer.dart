@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 Future<void> main() async {
@@ -26,6 +27,7 @@ Future<void> main() async {
     await _writeAppPubspec(appDirectory);
     await _writeMain(appDirectory);
     await _run('flutter', const ['pub', 'get'], temporaryRoot.path);
+    await _assertMinimalDependencyBoundary(temporaryRoot);
     await _run('flutter', const ['analyze'], appDirectory.path);
     await _run('flutter', const [
       'build',
@@ -34,7 +36,7 @@ Future<void> main() async {
       '--no-pub',
     ], appDirectory.path);
     stdout.writeln(
-      'PASS: a temporary third app consumed all four foundation packages.',
+      'PASS: a temporary app consumed only foundation and design system.',
     );
   } finally {
     if (temporaryRoot.existsSync()) {
@@ -47,12 +49,7 @@ Future<void> _copyFoundationPackages(
   Directory repository,
   Directory temporaryRoot,
 ) async {
-  for (final name in const [
-    'design_system',
-    'networking',
-    'platform_foundation',
-    'storage',
-  ]) {
+  for (final name in const ['design_system', 'platform_foundation']) {
     final source = Directory(
       '${repository.path}${Platform.pathSeparator}packages'
       '${Platform.pathSeparator}$name',
@@ -93,9 +90,7 @@ environment:
 workspace:
   - apps/consumer_app
   - packages/design_system
-  - packages/networking
   - packages/platform_foundation
-  - packages/storage
 ''',
   );
 }
@@ -114,9 +109,7 @@ dependencies:
   flutter:
     sdk: flutter
   design_system: ^0.1.0
-  networking: ^0.1.0
   platform_foundation: ^0.1.0
-  storage: ^0.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -132,24 +125,94 @@ Future<void> _writeMain(Directory app) async {
   ).writeAsString(r'''
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:networking/networking.dart';
 import 'package:platform_foundation/platform_foundation.dart';
-import 'package:storage/storage.dart';
 
 void main() {
   const Result<String> result = Success('ready');
-  final NetworkConfiguration network = NetworkConfiguration(
-    baseUri: Uri.parse('https://example.invalid'),
-  );
-  final KeyValueStore store = MemoryKeyValueStore();
   runApp(MaterialApp(
     theme: PlatformTheme.light(seedColor: Colors.blue),
     home: Scaffold(
-      body: Text('${result.runtimeType} ${network.baseUri.host} ${store.runtimeType}'),
+      body: Text('${result.runtimeType}'),
     ),
   ));
 }
 ''');
+}
+
+Future<void> _assertMinimalDependencyBoundary(Directory root) async {
+  final result = await Process.run(
+    'flutter',
+    const ['pub', 'deps', '--json'],
+    workingDirectory: root.path,
+    runInShell: Platform.isWindows,
+  );
+  if (result.exitCode != 0) {
+    throw ProcessException(
+      'flutter',
+      const ['pub', 'deps', '--json'],
+      result.stderr as String,
+      result.exitCode,
+    );
+  }
+  final document = jsonDecode(result.stdout as String) as Map<String, Object?>;
+  final packages = <String, Set<String>>{
+    for (final package
+        in (document['packages']! as List<Object?>)
+            .cast<Map<String, Object?>>())
+      package['name']! as String: _runtimeDependencies(package),
+  };
+  final runtimeClosure = <String>{};
+
+  void collect(String name) {
+    if (!runtimeClosure.add(name)) {
+      return;
+    }
+    for (final dependency in packages[name] ?? <String>{}) {
+      collect(dependency);
+    }
+  }
+
+  collect('consumer_app');
+  const forbidden = {
+    'auth_core',
+    'auth_ui',
+    'dio',
+    'firebase_core',
+    'firebase_messaging',
+    'networking',
+    'storage',
+    'core',
+    'shared',
+  };
+  final violations = runtimeClosure.intersection(forbidden).toList()..sort();
+  final namedViolations =
+      runtimeClosure
+          .where(
+            (name) =>
+                name.contains('chat') ||
+                name.contains('realtime') ||
+                name.contains('socket_io') ||
+                name.contains('web_socket'),
+          )
+          .toList()
+        ..sort();
+  if (violations.isNotEmpty || namedViolations.isNotEmpty) {
+    throw StateError(
+      'Temporary minimal consumer pulled forbidden dependencies: '
+      '${[...violations, ...namedViolations]}',
+    );
+  }
+  stdout.writeln('PASS: temporary consumer dependency boundary is minimal.');
+}
+
+Set<String> _runtimeDependencies(Map<String, Object?> package) {
+  final direct = (package['directDependencies'] as List<Object?>? ?? const [])
+      .whereType<String>()
+      .toSet();
+  final development = (package['devDependencies'] as List<Object?>? ?? const [])
+      .whereType<String>()
+      .toSet();
+  return direct.difference(development);
 }
 
 Future<void> _run(

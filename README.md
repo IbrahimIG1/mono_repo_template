@@ -15,7 +15,7 @@ This repository is migrating from a legacy Flutter template to a modular interna
 
 ```text
 apps/
-  minimal_app/          # Small reference app and app-owned composition root
+  minimal_app/          # Compact auth/routing integration reference (historical name)
 packages/
   platform_foundation/  # Result, AppFailure, redacted logging
   networking/           # HTTP contracts and injected Dio adapter
@@ -74,7 +74,11 @@ Goal 4 behavior and test evidence are documented in the
 
 ## Create another V2 app
 
-Follow the [new-app guide](docs/guides/new-v2-app.md). A new app is admitted only after workspace resolution, zero analyzer findings, executable tests, architecture checks, and applicable platform builds pass.
+Follow the [new-app guide](docs/guides/new-v2-app.md). The disposable consumer
+gate proves the true minimum (`platform_foundation` + `design_system`) without
+auth, networking, storage, Firebase, realtime, chat, socket, or legacy code. A
+new app is admitted only after workspace resolution, zero analyzer findings,
+executable tests, architecture checks, and applicable platform builds pass.
 
 ## Architecture and migration sources
 
@@ -86,5 +90,6 @@ Follow the [new-app guide](docs/guides/new-v2-app.md). A new app is admitted onl
 - [Foundation package ownership](docs/architecture/adr-006-foundation-packages.md)
 - [Auth and typed routing implementation](docs/architecture/adr-007-auth-and-routing.md)
 - [Mobile-first V2 scope](docs/architecture/adr-008-mobile-first-scope.md)
+- [`minimal_app` scope decision](docs/architecture/adr-009-minimal-reference-scope.md)
 - [Execution workflow](docs/migration/v2-execution-workflow.md)
 - [Repository working rules](AGENTS.md)
