@@ -1,0 +1,4 @@
+name: fixture_root
+workspace:
+  - packages/minimal_app
+  - packages/bridge

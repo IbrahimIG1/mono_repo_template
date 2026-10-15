@@ -1,0 +1,9 @@
+{
+  "configVersion": 2,
+  "packages": [
+    {"name": "fixture_root", "rootUri": ".", "packageUri": "lib/"},
+    {"name": "minimal_app", "rootUri": "packages/minimal_app", "packageUri": "lib/"},
+    {"name": "bridge", "rootUri": "packages/bridge", "packageUri": "lib/"},
+    {"name": "firebase_core", "rootUri": "third_party/firebase_core", "packageUri": "lib/"}
+  ]
+}

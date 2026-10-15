@@ -23,6 +23,7 @@ jobs:
       - run: flutter pub get --enforce-lockfile
       - run: dart run tool/workspace.dart verify
       - run: dart analyze tool
+      - run: dart test tool/test
       - run: dart run tool/check_architecture.dart
       - run: dart run tool/verify_temporary_consumer.dart
 

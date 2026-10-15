@@ -1,0 +1,3 @@
+import 'package:auth_core/auth_gateway.dart';
+
+final class SignInScreen {}
