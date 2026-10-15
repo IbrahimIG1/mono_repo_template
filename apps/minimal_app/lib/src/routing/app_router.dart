@@ -7,10 +7,20 @@ import 'package:go_router/go_router.dart';
 import 'app_routes.dart';
 import 'destination_policy.dart';
 
+typedef DestinationAuthorizer =
+    bool Function(Uri destination, AuthSession session);
+
 final class AppRouter {
-  AppRouter({required SessionManager sessionManager, String? initialLocation})
-    : _sessionManager = sessionManager,
-      _refresh = _AuthRouterRefresh(sessionManager.states) {
+  AppRouter({
+    required SessionManager sessionManager,
+    String? initialLocation,
+    DestinationAuthorizer? destinationAuthorizer,
+  }) : _sessionManager = sessionManager,
+       _destinationAuthorizer =
+           destinationAuthorizer ??
+           ((destination, _) =>
+               AppDestinationPolicy.requiresAuthentication(destination)),
+       _refresh = _AuthRouterRefresh(sessionManager.states) {
     router = GoRouter(
       routes: $appRoutes,
       initialLocation: initialLocation,
@@ -20,6 +30,7 @@ final class AppRouter {
   }
 
   final SessionManager _sessionManager;
+  final DestinationAuthorizer _destinationAuthorizer;
   final _AuthRouterRefresh _refresh;
   late final GoRouter router;
   String? _pendingDestination;
@@ -43,7 +54,7 @@ final class AppRouter {
       if (isSignIn) {
         _pendingSignIn = true;
         _pendingDestination ??= AppDestinationPolicy.safeInternalDestination(
-          uri.queryParameters['from'],
+          AppDestinationPolicy.singleQueryValue(uri, 'from'),
         );
       } else {
         _pendingDestination ??= safeCurrent;
@@ -52,14 +63,20 @@ final class AppRouter {
     }
 
     if (authState case AuthAuthenticated() || AuthRefreshing()) {
+      final session = switch (authState) {
+        AuthAuthenticated(:final session) => session,
+        AuthRefreshing(:final previousSession) => previousSession,
+        _ => throw StateError('Authenticated state expected.'),
+      };
       if (isSignIn) {
         final destination = AppDestinationPolicy.safeInternalDestination(
-          uri.queryParameters['from'],
+          AppDestinationPolicy.singleQueryValue(uri, 'from'),
         );
-        return _consumeDestination(destination) ?? const HomeRoute().location;
+        return _consumeDestination(destination, session) ??
+            const HomeRoute().location;
       }
       if (isSplash) {
-        return _consumeDestination(null) ?? const HomeRoute().location;
+        return _consumeDestination(null, session) ?? const HomeRoute().location;
       }
       return null;
     }
@@ -83,11 +100,16 @@ final class AppRouter {
     return null;
   }
 
-  String? _consumeDestination(String? routeDestination) {
-    final destination = routeDestination ?? _pendingDestination;
+  String? _consumeDestination(String? routeDestination, AuthSession session) {
+    final candidate = routeDestination ?? _pendingDestination;
     _pendingSignIn = false;
     _pendingDestination = null;
-    return destination;
+    final destination = AppDestinationPolicy.safeInternalDestination(candidate);
+    if (destination == null) {
+      return null;
+    }
+    final uri = Uri.parse(destination);
+    return _destinationAuthorizer(uri, session) ? destination : null;
   }
 }
 

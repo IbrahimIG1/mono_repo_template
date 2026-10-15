@@ -105,6 +105,14 @@ Form submission/loading/error state belongs to the sign-in Cubit and is not dupl
 
 Repeated `restore()` calls after initialization return without rereading unless an explicit future reset API is approved. State emissions are distinct by semantic value; a stale operation from an older generation emits nothing.
 
+Concurrent `restore()` calls share one future and therefore the same result. A
+storage read failure publishes `unauthenticated` and returns that failure without
+clearing unknown data. An `invalidStoredSession` failure is the only read failure
+that triggers cleanup; if cleanup fails, restore publishes `unauthenticated` and
+returns the clear failure because the corrupt value may still be present. An
+expired session follows the same clear-failure rule. No restore storage failure
+is converted to success.
+
 ## Refresh algorithm
 
 1. Networking passes the exact access token used by the failed request, or `null` when none was attached.
