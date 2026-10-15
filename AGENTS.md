@@ -10,6 +10,7 @@ Read these sources before structural work:
 - `docs/architecture/adr-003-composition-and-migration.md`
 - `docs/architecture/adr-004-chat-event-boundary.md`
 - `docs/architecture/adr-005-toolchain-workspace-and-runner.md`
+- `docs/architecture/adr-006-foundation-packages.md`
 
 ## Current migration boundary
 

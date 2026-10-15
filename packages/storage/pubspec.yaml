@@ -1,0 +1,22 @@
+name: storage
+description: Injected key-value and secure string storage contracts and adapters.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.12.1 <3.13.0"
+  flutter: ">=3.44.1 <3.45.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_secure_storage: ^11.2.0
+  platform_foundation: ^0.1.0
+  shared_preferences: ^2.5.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
