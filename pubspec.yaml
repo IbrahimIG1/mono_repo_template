@@ -1,0 +1,16 @@
+name: flutter_platform_workspace
+description: Workspace root for admitted V2 platform packages and reference apps.
+publish_to: none
+
+environment:
+  sdk: ">=3.12.1 <3.13.0"
+
+workspace:
+  - apps/minimal_app
+  - packages/design_system
+  - packages/networking
+  - packages/platform_foundation
+  - packages/storage
+
+dev_dependencies:
+  lints: ^6.0.0

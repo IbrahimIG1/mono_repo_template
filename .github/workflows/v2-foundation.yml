@@ -1,0 +1,58 @@
+name: V2 Foundation
+
+on:
+  push:
+    branches: [main, v2/goal-3-foundation]
+  pull_request:
+
+concurrency:
+  group: v2-foundation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.1
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - run: dart run tool/workspace.dart verify
+      - run: dart analyze tool
+      - run: dart run tool/check_architecture.dart
+      - run: dart run tool/verify_temporary_consumer.dart
+
+  build:
+    name: Build ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: Android
+            os: ubuntu-latest
+            command: flutter build apk --debug --no-pub
+          - target: iOS
+            os: macos-latest
+            command: flutter build ios --release --no-codesign --no-pub
+          - target: Web
+            os: ubuntu-latest
+            command: flutter build web --release --no-pub
+          - target: Windows
+            os: windows-latest
+            command: flutter build windows --release --no-pub
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.1
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - run: ${{ matrix.command }}
+        working-directory: apps/minimal_app

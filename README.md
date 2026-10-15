@@ -1,252 +1,70 @@
-﻿## Flutter Start Template (Monorepo)
+# Flutter Internal Platform Template
 
-This repository is a reusable Flutter monorepo template intended as a starting point for multiple apps. It currently includes an `apps/` directory (each app is a normal Flutter app), plus legacy `core/` and `shared/` packages for DI, networking, widgets, models, and styles.
+This repository is migrating from a legacy Flutter template to a modular internal platform for Android, iOS, Web, and Windows. The first usable V2 foundation is intentionally small: apps opt into four admitted packages and own their composition, configuration, routes, DTOs, branding, and platform files.
 
-Use this template as a base for cloning new apps and accelerating project setup.
+## Current status
 
-> [!IMPORTANT]
-> V2 is being built incrementally. The current `core/`, `shared/`, `user_app`, and `admin_app` remain legacy code and are not yet the target architecture. Goal 1 is complete as an audit and decision baseline; implementation begins with new packages and a new `minimal_app`, without converting the legacy apps in place.
+- Goals 1 and 2 are complete: the legacy inventory, architecture decisions, pinned Flutter `3.44.1` / Dart `3.12.1` toolchain, Pub Workspace behavior, and four-platform spike are evidence-backed.
+- Goal 3 adds `platform_foundation`, `networking`, `storage`, `design_system`, and a new `minimal_app`.
+- `core`, `shared`, `user_app`, and `admin_app` remain outside the V2 workspace as compatibility code. They are not examples of the target architecture.
+- Auth, routing, notifications, and realtime are later V2 goals. Chat remains V2.1 and is not part of the foundation.
 
-## V2 migration status
+## Workspace
 
-- Start with the [Goal 1 repository audit](docs/migration/v2-goal-1-audit.md).
-- Read the completed [Goal 2 technical-spike evidence](docs/spikes/goal-2-technical-spike.md) before changing the pinned SDK, workspace, typed routes, storage or realtime transport assumptions.
-- Architecture decisions are recorded in [foundation contracts](docs/architecture/adr-001-foundation-contracts.md), [authentication/session behavior](docs/architecture/adr-002-auth-session-and-replay.md), [composition and migration](docs/architecture/adr-003-composition-and-migration.md), and the [chat event boundary](docs/architecture/adr-004-chat-event-boundary.md).
-- Repository-wide working rules live in [AGENTS.md](AGENTS.md); reusable workflows live in `.prompts/` and `skills/`.
-- The first V2 workspace will contain only newly admitted V2 members. Legacy projects join later after their own analyzer, tests, dependency resolution, and required builds pass.
-- `core/` and `shared/` stay at their current paths as temporary compatibility facades until documented parity checks allow removal.
-
-## Project Overview
-
-- Purpose: evolve toward a production-oriented starting point that teams can clone and customize. The current legacy baseline is not production-ready; support claims are made only after the V2 gates pass.
-- Flavors: includes two entry points: `apps/user_app/lib/main_development.dart` and `apps/user_app/lib/main_production.dart` (dev/pro flavors are wired via the `.vscode/launch.json` and typical Flutter `--flavor` usage).
-- Architecture: feature-based app layout under `apps/`, with `core/` (DI + networking + helpers) and `shared/` (widgets, models, styles). The codebase uses `flutter_bloc` (Cubit style) + repository/service layers and `get_it` for DI.
-
-## Quick index (what's in this repo)
-
-Top-level files and directories you'll commonly use:
-
-```
-/
+```text
 apps/
-  user_app/           # Example app (full Flutter project)
-    android/
-    ios/
-    macos/
-    linux/
-    windows/
-    web/
-    lib/
-      main_development.dart
-      main_production.dart
-      features/            # Feature modules (login, register, onboarding, etc.)
-      generated/           # Generated localization and other generated sources
-      l10n/
-      routing/
-    assets/
-    test/
-    pubspec.yaml
-    pubspec.lock
-core/                      # Core package (DI, networking, helpers, storage)
-  lib/
-    di/
-    network/
-    helper/
-    local/
-shared/                    # Shared package (widgets, models, styles)
-  lib/
-    widgets/
-    models/
-    styles/
-.vscode/
-README.md
+  minimal_app/          # Small reference app and app-owned composition root
+packages/
+  platform_foundation/  # Result, AppFailure, redacted logging
+  networking/           # HTTP contracts and injected Dio adapter
+  storage/              # Storage contracts and plugin adapters
+  design_system/        # Brand-neutral theme tokens and primitives
+core/                   # Legacy compatibility package; not admitted
+shared/                 # Legacy compatibility package; not admitted
 ```
 
-Key files to know:
-- `apps/user_app/lib/main_development.dart` and `apps/user_app/lib/main_production.dart` - flavor entry points.
-- `core/lib/di/` - dependency injection base setup (uses `get_it`).
-- `core/lib/network/` - `dio` factory, API service wrappers and error handling.
-- `shared/lib/widgets/` - shared widgets (buttons, headers, toast helpers using `fluttertoast`).
-- `apps/user_app/lib/features/` - feature-first structure containing UI, logic (Cubits), models, and repos.
+Dependency direction:
 
-## Monorepo structure (what goes where)
+```text
+minimal_app -> design_system
+            -> networking -> platform_foundation
+            -> storage    -> platform_foundation
+            -> platform_foundation
+```
 
-- `apps/<app_name>/` - a normal Flutter app (platform folders, assets, `lib/`, `test/`).
-- `apps/<app_name>/lib/features/` - app-specific feature modules (UI, cubits, repos).
-- `apps/<app_name>/lib/routing/` - app routes and screens names.
-- `core/` - shared app-agnostic logic (DI base setup, networking, helpers, local storage).
-- `shared/` - shared UI and data (widgets, models, styles) used across apps.
+Packages never import app code or legacy packages. There is no global Dio, storage instance, navigation object, or package-level service locator.
 
-## Create a new app in `apps/`
+## Bootstrap and verification
 
-From the repo root:
+Install the Flutter version declared in `.fvmrc`, then run from the repository root:
 
 ```powershell
-flutter create apps/my_app
+flutter pub get --enforce-lockfile
+dart run tool/workspace.dart verify
+dart analyze tool
+dart run tool/check_architecture.dart
+dart run tool/verify_temporary_consumer.dart
 ```
 
-Optional (set package id):
+Run the reference app:
 
 ```powershell
-flutter create --org com.example apps/my_app
+cd apps/minimal_app
+flutter run -d windows
 ```
 
-Then add the monorepo packages to `apps/my_app/pubspec.yaml`:
+Platform build gates are documented in [Goal 3 evidence](docs/migration/v2-goal-3-foundation.md). Compilation is not treated as proof of production runtime support; see the [capability/platform matrix](docs/capabilities/platform-matrix.md).
 
-```yaml
-dependencies:
-  core:
-    path: ../../core
-  shared:
-    path: ../../shared
-```
+## Create another V2 app
 
-After that:
-- Update imports to use `package:core/...` and `package:shared/...`.
-- Create app DI wiring similar to `apps/user_app/lib/di/` and call it from your `main_*` entry points.
+Follow the [new-app guide](docs/guides/new-v2-app.md). A new app is admitted only after workspace resolution, zero analyzer findings, executable tests, architecture checks, and applicable platform builds pass.
 
-## Packages & Dependencies (from `pubspec.yaml`)
+## Architecture and migration sources
 
-The project includes the following packages. Short purpose explanation for each:
-
-| Package | Version (declared) | Purpose |
-|---|---:|---|
-| `conditional_builder_null_safety` | ^0.0.6 | Small utility for conditional widget building.
-| `cupertino_icons` | ^1.0.8 | iOS-style icons used by Flutter.
-| `dartz` | ^0.10.1 | Functional programming helpers (Either, Option) if used in business logic.
-| `dio` | ^5.8.0+1 | HTTP client used for networking; configured via `core/lib/network`.
-| `firebase_core` | ^3.14.0 | Firebase core package (initialization for Firebase features).
-| `firebase_messaging` | ^15.2.7 | Push notifications handling.
-| `flutter` | SDK | Flutter framework.
-| `flutter_bloc` | ^9.1.1 | State management; project uses Cubit/BLoC patterns.
-| `flutter_dotenv` | ^5.2.1 | Load environment variables from `.env` files.
-| `flutter_localization` | ^0.3.3 | Helper for localization configuration.
-| `flutter_localizations` | sdk: flutter | Flutter official localization support.
-| `flutter_native_splash` | ^2.4.6 | Generates native splash screens for each platform.
-| `flutter_screenutil` | ^5.9.3 | Responsive sizing helpers for multiple screen sizes.
-| `flutter_secure_storage` | ^9.2.4 | Secure storage for tokens/credentials.
-| `flutter_svg` | ^2.2.0 | Load and display SVG assets.
-| `fluttertoast` | ^8.2.12 | Simple toast UI; used in `shared/lib/widgets/toast`.
-| `get_it` | ^8.0.3 | Service locator / dependency injection container.
-| `intl` | ^0.20.2 | Internationalization and number/date formatting.
-| `intl_phone_number_input` | ^0.7.4 | Phone number input widget with parsing/validation.
-| `intl_utils` | ^2.8.10 | i18n codegen helpers (for `.arb` -> Dart generation).
-| `introduction_screen` | ^3.1.17 | Onboarding screens helper.
-| `lottie` | ^3.3.1 | Lottie animations.
-| `pin_code_fields` | ^8.0.1 | Pin/OTP input fields.
-| `pretty_dio_logger` | ^1.4.0 | Helpful Dio request/response logging during development.
-| `shared_preferences` | ^2.5.3 | Local key-value storage for non-sensitive data.
-| `flutter_launcher_icons` | ^0.14.4 | Tool to generate launcher icons.
-
-Dev dependencies:
-- `flutter_lints` (^5.0.0) — recommended lint rules.
-- `flutter_test` — unit & widget tests.
-
-Note: some packages require platform setup (e.g., Firebase, notifications). See their package docs for details.
-
-## Setup Instructions
-
-Note: replace `user_app` with your app folder (for example `user_app`) when needed.
-
-1. Clone the repository:
-
-```powershell
-git clone <repo-url> my_app
-cd my_app
-```
-
-2. Install app dependencies (path packages are resolved automatically):
-
-```powershell
-cd apps/user_app
-flutter pub get
-```
-
-3. (Optional) Create a fresh repo for your new app:
-
-```powershell
-rm -rf .git
-git init
-git add .
-git commit -m "Initial commit from flutter_start_template"
-```
-
-4. Rename the app (package identifiers and app name):
-- Update `apps/user_app/pubspec.yaml` -> `name:` and `description`.
-- Android package: update package name under `apps/user_app/android/app/src/main/kotlin/.../MainActivity.kt` and `apps/user_app/android/app/src/main/AndroidManifest.xml`. Also update `apps/user_app/android/app/build.gradle.kts` if necessary.
-- iOS bundle id: update `apps/user_app/ios/Runner/Info.plist` and Xcode project settings.
-- macOS bundle id: `apps/user_app/macos/Runner/Configs/AppInfo.xcconfig`.
-
-Tip: For an automated rename you can use search-and-replace tools (e.g. ripgrep + sed) but please verify Android/iOS project files manually.
-
-5. Configure flavors and environment files:
-- This template includes `.env_dev` and `.env_pro` in `apps/user_app/assets/`. Copy and update them with API keys and flags.
-- Launch dev flavor locally:
-
-```powershell
-cd apps/user_app
-flutter run --flavor dev -t lib/main_development.dart
-```
-
-Or build an APK (verbose, from `apps/user_app`):
-
-```powershell
-cd apps/user_app
-flutter build apk --flavor dev -t lib/main_development.dart -v
-```
-
-6. Platform-specific: set up Firebase, notification entitlements, Android SDK, and signing for release builds according to those services' docs.
-
-## Development Notes
-
-- State management: this project uses `flutter_bloc` (Cubit) with repositories and service layers under `apps/user_app/lib/features/*/logic` and `core/lib/network`.
-- Dependency injection: `core/lib/di/` wires `get_it` instances for repositories, services, and cubits.
-- Networking: `dio` + `pretty_dio_logger` via `core/lib/network/dio_factory.dart`.
-- Naming conventions:
-	- Feature folders should be named `snake_case` (e.g., `login_screen`).
-	- Cubit/state files follow `feature_logic_*` (see existing examples under `apps/user_app/lib/features/*/logic`).
-	- Widgets that are reusable live under `shared/lib/widgets`.
- - Code style & linting: `flutter_lints` is configured; run `dart analyze` and `flutter test` regularly.
- - Localization: ARB files live under `apps/user_app/lib/l10n` and generated code under `apps/user_app/lib/generated` using `intl_utils`.
-
-Edge cases & checks
-- Empty or missing `.env` keys — guard network calls and show clear logging.
-- Long-running network calls — use timeouts, handle Dio exceptions in `core/lib/network/error`.
-- Token refresh — `refresh_token_model.dart` and repo wiring exist; ensure refresh flows are tested.
-
-## Usage Example - Starting a new project from this template
-
-1. Clone and prepare a new repo (example):
-
-```powershell
-git clone https://github.com/IbrahimIG1/flutter_start_template.git my_new_app
-cd my_new_app
-rm -rf .git
-git init
-cd apps/user_app
-flutter pub get
-```
-
-2. Replace the app name and package id (manual steps described above).
-
-3. Run the dev flavor locally:
-
-```powershell
-cd apps/user_app
-flutter run --flavor dev -t lib/main_development.dart
-```
-
-## Author & License
-
-- Author: IbrahimIG1
-- Recommended license: MIT — if you want to publish this template, add a `LICENSE` file with the MIT text and a header in source files.
-
-If you want, I can add a `LICENSE` file (MIT) and open a small PR for it.
-
----
-
-If you want this README to include more specifics (detailed rename scripts, CI/CD examples, or a CONTRIBUTING.md), tell me which sections to expand and I will update the file.
-
-
-
-
+- [Goal 1 audit](docs/migration/v2-goal-1-audit.md)
+- [Goal 2 spike](docs/spikes/goal-2-technical-spike.md)
+- [Foundation contracts](docs/architecture/adr-001-foundation-contracts.md)
+- [Composition and migration](docs/architecture/adr-003-composition-and-migration.md)
+- [Toolchain and workspace runner](docs/architecture/adr-005-toolchain-workspace-and-runner.md)
+- [Foundation package ownership](docs/architecture/adr-006-foundation-packages.md)
+- [Repository working rules](AGENTS.md)
