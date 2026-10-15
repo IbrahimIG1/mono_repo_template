@@ -108,8 +108,15 @@ Future<void> _runTask(String task, _WorkspacePackage package) async {
         stdout.writeln('SKIP: no go_router_builder dependency');
         return;
       }
+      final committed = await _generatedSnapshot(package.path);
       await _run('dart', const ['run', 'build_runner', 'build'], package.path);
       final first = await _generatedSnapshot(package.path);
+      if (!_sameSnapshot(committed, first)) {
+        throw StateError(
+          '${package.name} generated files were not up to date before the '
+          'route gate. Run generation and commit the result.',
+        );
+      }
       await _run('dart', const ['run', 'build_runner', 'build'], package.path);
       final second = await _generatedSnapshot(package.path);
       if (!_sameSnapshot(first, second)) {
@@ -142,31 +149,25 @@ Future<void> _run(
   }
 }
 
-Future<Map<String, List<int>>> _generatedSnapshot(String packagePath) async {
+Future<Map<String, String>> _generatedSnapshot(String packagePath) async {
   final lib = Directory('$packagePath${Platform.pathSeparator}lib');
-  final result = <String, List<int>>{};
+  final result = <String, String>{};
   await for (final entity in lib.list(recursive: true)) {
     if (entity is File && entity.path.endsWith('.g.dart')) {
-      result[_normalized(entity.path)] = await entity.readAsBytes();
+      result[_normalized(entity.path)] = (await entity.readAsString())
+          .replaceAll('\r\n', '\n');
     }
   }
   return result;
 }
 
-bool _sameSnapshot(Map<String, List<int>> left, Map<String, List<int>> right) {
+bool _sameSnapshot(Map<String, String> left, Map<String, String> right) {
   if (left.length != right.length || !left.keys.every(right.containsKey)) {
     return false;
   }
   for (final key in left.keys) {
-    final leftBytes = left[key]!;
-    final rightBytes = right[key]!;
-    if (leftBytes.length != rightBytes.length) {
+    if (left[key] != right[key]) {
       return false;
-    }
-    for (var index = 0; index < leftBytes.length; index++) {
-      if (leftBytes[index] != rightBytes[index]) {
-        return false;
-      }
     }
   }
   return true;
