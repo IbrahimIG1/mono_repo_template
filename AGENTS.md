@@ -52,6 +52,26 @@ Do not put app assets, endpoints, Firebase configuration or feature DTOs into sh
 - Keep removal commits separate and recoverable.
 - Follow workspace admission rules from the Goal 1 audit.
 
+## Goal Git lifecycle
+
+Before starting every goal:
+
+1. require a clean worktree and inspect unowned changes;
+2. switch to `main`, run `git fetch origin --prune`, then update with `git pull --ff-only origin main`;
+3. create a new goal branch from that updated `main`;
+4. do not implement the goal directly on `main`.
+
+After completing and verifying every goal:
+
+1. commit and push the goal branch;
+2. switch to `main` and run `git pull --ff-only origin main` again;
+3. merge the completed goal branch into `main` with a merge commit;
+4. rerun checks proportional to the merge risk;
+5. push `main` and verify local `main`, `origin/main`, and the remote head have the same commit;
+6. start the next goal only from that synchronized `main`.
+
+If `main` changes during integration, fetch and reconcile it before pushing. Never force-push `main` or discard either side of a conflict without inspecting ownership and intent.
+
 ## Quality rules
 
 - Analyzer target: zero errors, warnings and infos.
