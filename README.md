@@ -49,12 +49,6 @@ dart run tool/verify_temporary_consumer.dart
 Run the reference app:
 
 ```powershell
-flutter run -d windows -C apps/minimal_app
-```
-
-If your Flutter CLI does not support `-C`, use:
-
-```powershell
 cd apps/minimal_app
 flutter run -d windows
 ```
@@ -74,4 +68,3 @@ Follow the [new-app guide](docs/guides/new-v2-app.md). A new app is admitted onl
 - [Toolchain and workspace runner](docs/architecture/adr-005-toolchain-workspace-and-runner.md)
 - [Foundation package ownership](docs/architecture/adr-006-foundation-packages.md)
 - [Repository working rules](AGENTS.md)
-
