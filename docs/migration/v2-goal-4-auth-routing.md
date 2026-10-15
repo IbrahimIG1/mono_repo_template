@@ -1,6 +1,6 @@
 # V2 Goal 4: Authentication and Typed Routing
 
-Status: implementation complete; local gates passed, CI evidence pending integration.
+Status: complete; local gates and four-platform CI passed.
 
 ## Delivered boundary
 
@@ -58,10 +58,20 @@ Evidence collected on Windows on 2026-10-15:
 | Web | `flutter build web --release --no-pub` | PASS, including Wasm dry run |
 | Windows | `flutter build windows --release --no-pub` | PASS |
 | Windows launch smoke | release executable remained alive for 8 seconds | PASS |
-| iOS | GitHub Actions macOS build | PENDING |
+| iOS | `flutter build ios --release --no-codesign --no-pub` | PASS on macOS CI |
 
 The first full workspace run passed formatting, analysis, and all tests, then
 encountered stale `build_runner` state after removal of a generated package
 template file. `dart run build_runner clean` removed that cache; the dedicated
 two-pass route gate then passed. This was tooling state, not a source or route
 generation failure.
+
+GitHub Actions run
+[38743442295](https://github.com/IbrahimIG1/mono_repo_template/actions/runs/38743442295)
+passed all five jobs against implementation commit `103f63a`:
+
+- workspace quality, tests, architecture gates, and temporary consumer: PASS;
+- Android debug APK: PASS;
+- iOS release no-codesign: PASS;
+- Web release: PASS;
+- Windows release: PASS.
