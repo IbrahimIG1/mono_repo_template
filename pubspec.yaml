@@ -12,6 +12,7 @@ workspace:
   - packages/design_system
   - packages/networking
   - packages/notifications_core
+  - packages/notifications_fcm
   - packages/platform_foundation
   - packages/storage
 

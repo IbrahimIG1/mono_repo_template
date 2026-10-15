@@ -1,6 +1,12 @@
 enum NotificationCapability { supported, unsupported }
 
-enum NotificationPermission { notDetermined, denied, provisional, authorized }
+enum NotificationPermission {
+  notDetermined,
+  denied,
+  deniedPermanently,
+  provisional,
+  authorized,
+}
 
 final class PushToken {
   const PushToken(this.value) : assert(value != '');
