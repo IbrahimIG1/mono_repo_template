@@ -1,12 +1,24 @@
 ﻿## Flutter Start Template (Monorepo)
 
-This repository is a reusable Flutter monorepo template intended as a starting point for multiple apps. It includes an `apps/` workspace (each app is a normal Flutter app), plus `core/` and `shared/` packages for DI, networking, widgets, models, and styles.
+This repository is a reusable Flutter monorepo template intended as a starting point for multiple apps. It currently includes an `apps/` directory (each app is a normal Flutter app), plus legacy `core/` and `shared/` packages for DI, networking, widgets, models, and styles.
 
 Use this template as a base for cloning new apps and accelerating project setup.
 
+> [!IMPORTANT]
+> V2 is being built incrementally. The current `core/`, `shared/`, `user_app`, and `admin_app` remain legacy code and are not yet the target architecture. Goal 1 is complete as an audit and decision baseline; implementation begins with new packages and a new `minimal_app`, without converting the legacy apps in place.
+
+## V2 migration status
+
+- Start with the [Goal 1 repository audit](docs/migration/v2-goal-1-audit.md).
+- Read the completed [Goal 2 technical-spike evidence](docs/spikes/goal-2-technical-spike.md) before changing the pinned SDK, workspace, typed routes, storage or realtime transport assumptions.
+- Architecture decisions are recorded in [foundation contracts](docs/architecture/adr-001-foundation-contracts.md), [authentication/session behavior](docs/architecture/adr-002-auth-session-and-replay.md), [composition and migration](docs/architecture/adr-003-composition-and-migration.md), and the [chat event boundary](docs/architecture/adr-004-chat-event-boundary.md).
+- Repository-wide working rules live in [AGENTS.md](AGENTS.md); reusable workflows live in `.prompts/` and `skills/`.
+- The first V2 workspace will contain only newly admitted V2 members. Legacy projects join later after their own analyzer, tests, dependency resolution, and required builds pass.
+- `core/` and `shared/` stay at their current paths as temporary compatibility facades until documented parity checks allow removal.
+
 ## Project Overview
 
-- Purpose: provide a production-ready starting point that teams can clone and customize to ship new Flutter apps quickly.
+- Purpose: evolve toward a production-oriented starting point that teams can clone and customize. The current legacy baseline is not production-ready; support claims are made only after the V2 gates pass.
 - Flavors: includes two entry points: `apps/user_app/lib/main_development.dart` and `apps/user_app/lib/main_production.dart` (dev/pro flavors are wired via the `.vscode/launch.json` and typical Flutter `--flavor` usage).
 - Architecture: feature-based app layout under `apps/`, with `core/` (DI + networking + helpers) and `shared/` (widgets, models, styles). The codebase uses `flutter_bloc` (Cubit style) + repository/service layers and `get_it` for DI.
 
@@ -234,9 +246,6 @@ If you want, I can add a `LICENSE` file (MIT) and open a small PR for it.
 ---
 
 If you want this README to include more specifics (detailed rename scripts, CI/CD examples, or a CONTRIBUTING.md), tell me which sections to expand and I will update the file.
-
-
-
 
 
 

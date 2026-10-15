@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Documentation"
+  short_description: "Document real architecture and feature flows"
+  default_prompt: "Use $documentation to update the relevant project documentation."
