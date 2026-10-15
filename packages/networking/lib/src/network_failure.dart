@@ -1,9 +1,11 @@
 import 'package:platform_foundation/platform_foundation.dart';
 
 enum NetworkFailureKind {
+  authorization,
   cancelled,
   connection,
   invalidResponse,
+  requestNotReplayable,
   timeout,
   transport,
 }

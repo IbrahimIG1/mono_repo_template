@@ -3,6 +3,8 @@ import 'dart:io';
 
 const _workspaceMembers = {
   'minimal_app',
+  'auth_core',
+  'auth_ui',
   'design_system',
   'networking',
   'platform_foundation',
@@ -11,11 +13,15 @@ const _workspaceMembers = {
 
 const _allowedLocalDependencies = {
   'minimal_app': {
+    'auth_core',
+    'auth_ui',
     'design_system',
     'networking',
     'platform_foundation',
     'storage',
   },
+  'auth_core': {'platform_foundation'},
+  'auth_ui': {'auth_core', 'platform_foundation'},
   'design_system': <String>{},
   'networking': {'platform_foundation'},
   'platform_foundation': <String>{},
@@ -28,6 +34,7 @@ Future<void> main() async {
   _checkAllowedEdges(packages);
   _checkCycles(packages);
   _checkMinimalRuntimeClosure(packages);
+  _checkAuthCoreClosure(packages);
   await _checkSourceRules();
   stdout.writeln(
     'PASS: workspace dependencies and source boundaries are valid.',
@@ -121,6 +128,39 @@ void _checkMinimalRuntimeClosure(Map<String, _Package> packages) {
   }
 }
 
+void _checkAuthCoreClosure(Map<String, _Package> packages) {
+  final closure = _runtimeClosure('auth_core', packages);
+  const forbidden = {
+    'dio',
+    'flutter',
+    'flutter_bloc',
+    'flutter_secure_storage',
+    'go_router',
+    'shared_preferences',
+  };
+  final violations = closure.intersection(forbidden).toList()..sort();
+  if (violations.isNotEmpty) {
+    throw StateError('auth_core pulls forbidden dependencies: $violations');
+  }
+}
+
+Set<String> _runtimeClosure(String root, Map<String, _Package> packages) {
+  final closure = <String>{};
+
+  void collect(String name) {
+    if (!closure.add(name)) {
+      return;
+    }
+    for (final dependency
+        in packages[name]?.runtimeDependencies ?? const <String>{}) {
+      collect(dependency);
+    }
+  }
+
+  collect(root);
+  return closure;
+}
+
 bool _isForbiddenDependency(String name) {
   final normalized = name.toLowerCase();
   return normalized == 'core' ||
@@ -161,6 +201,30 @@ Future<void> _checkSourceRules() async {
       for (final rule in rules) {
         if (rule.pattern.hasMatch(content)) {
           violations.add('${entity.path}: ${rule.reason}');
+        }
+      }
+    }
+  }
+  if (violations.isNotEmpty) {
+    throw StateError(violations.join('\n'));
+  }
+
+  await _checkPresentationHasNoGateway();
+}
+
+Future<void> _checkPresentationHasNoGateway() async {
+  final roots = [
+    Directory('packages/auth_ui/lib'),
+    Directory('apps/minimal_app/lib/src/ui'),
+  ];
+  final violations = <String>[];
+  final gatewayPattern = RegExp(r'\b(?:AuthGateway|SessionGateway)\b');
+  for (final root in roots) {
+    await for (final entity in root.list(recursive: true)) {
+      if (entity is File && entity.path.endsWith('.dart')) {
+        final content = await entity.readAsString();
+        if (gatewayPattern.hasMatch(content)) {
+          violations.add('${entity.path}: presentation references a gateway');
         }
       }
     }

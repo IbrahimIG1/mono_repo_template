@@ -7,6 +7,8 @@ environment:
 
 workspace:
   - apps/minimal_app
+  - packages/auth_core
+  - packages/auth_ui
   - packages/design_system
   - packages/networking
   - packages/platform_foundation

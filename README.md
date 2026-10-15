@@ -5,9 +5,11 @@ This repository is migrating from a legacy Flutter template to a modular interna
 ## Current status
 
 - Goals 1 and 2 are complete: the legacy inventory, architecture decisions, pinned Flutter `3.44.1` / Dart `3.12.1` toolchain, Pub Workspace behavior, and four-platform spike are evidence-backed.
-- Goal 3 adds `platform_foundation`, `networking`, `storage`, `design_system`, and a new `minimal_app`.
+- Goals 3 and 4 add the foundation, `auth_core`, optional `auth_ui`, typed
+  routing, and a new `minimal_app` that proves the complete auth/replay flow.
 - `core`, `shared`, `user_app`, and `admin_app` remain outside the V2 workspace as compatibility code. They are not examples of the target architecture.
-- Auth, routing, notifications, and realtime are later V2 goals. Chat remains V2.1 and is not part of the foundation.
+- Notifications and realtime are later V2 goals. Chat remains V2.1 and is not
+  part of the V2 foundation/auth release.
 
 ## Workspace
 
@@ -19,6 +21,8 @@ packages/
   networking/           # HTTP contracts and injected Dio adapter
   storage/              # Storage contracts and plugin adapters
   design_system/        # Brand-neutral theme tokens and primitives
+  auth_core/            # Pure-Dart auth/session contracts and orchestration
+  auth_ui/              # Optional Cubit and form primitives
 core/                   # Legacy compatibility package; not admitted
 shared/                 # Legacy compatibility package; not admitted
 ```
@@ -27,6 +31,8 @@ Dependency direction:
 
 ```text
 minimal_app -> design_system
+            -> auth_ui -> auth_core -> platform_foundation
+            -> auth_core
             -> networking -> platform_foundation
             -> storage    -> platform_foundation
             -> platform_foundation
@@ -55,6 +61,9 @@ flutter run -d windows
 
 Platform build gates are documented in [Goal 3 evidence](docs/migration/v2-goal-3-foundation.md). Compilation is not treated as proof of production runtime support; see the [capability/platform matrix](docs/capabilities/platform-matrix.md).
 
+Goal 4 behavior and test evidence are documented in the
+[auth/routing migration record](docs/migration/v2-goal-4-auth-routing.md).
+
 ## Create another V2 app
 
 Follow the [new-app guide](docs/guides/new-v2-app.md). A new app is admitted only after workspace resolution, zero analyzer findings, executable tests, architecture checks, and applicable platform builds pass.
@@ -67,4 +76,5 @@ Follow the [new-app guide](docs/guides/new-v2-app.md). A new app is admitted onl
 - [Composition and migration](docs/architecture/adr-003-composition-and-migration.md)
 - [Toolchain and workspace runner](docs/architecture/adr-005-toolchain-workspace-and-runner.md)
 - [Foundation package ownership](docs/architecture/adr-006-foundation-packages.md)
+- [Auth and typed routing implementation](docs/architecture/adr-007-auth-and-routing.md)
 - [Repository working rules](AGENTS.md)

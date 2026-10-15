@@ -30,6 +30,18 @@ dependencies:
 
 Add `networking` or `storage` only when the app uses them. Never copy dependencies from `minimal_app` blindly.
 
+For authentication, add `auth_core`; add `auth_ui` only if its Cubit and form
+primitives match the app. Bind each credential to `AuthGateway<C>` in the
+composition root, implement `SessionStore` over the chosen secure store, and
+give presentation a `SignIn<C>`/`SignOut` rather than a gateway. If protected
+HTTP is needed, app-owned bridges connect `SessionManager` to networking's
+token/recovery ports.
+
+Typed routing requires `go_router` plus `go_router_builder` and `build_runner`
+as dev dependencies. Route declarations and the root redirect remain app-owned.
+Only accept allow-listed internal post-login destinations; do not redirect to a
+raw `from` value.
+
 ## 3. Own composition and configuration
 
 Create one app composition root. Construct infrastructure there, pass interfaces through constructors, and dispose resources in reverse order. Apps own endpoints, DTO adapters, routes, localization, platform configuration, identifiers, assets, and branding.
