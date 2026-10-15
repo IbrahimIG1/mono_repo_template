@@ -2,7 +2,6 @@ include: package:lints/recommended.yaml
 
 analyzer:
   exclude:
-    - ".tmp_liquid_glass/**"
     - "**/build/**"
     - "apps/admin_app/**"
     - "apps/user_app/**"
