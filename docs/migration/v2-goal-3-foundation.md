@@ -1,6 +1,6 @@
 # V2 Goal 3: Foundation and `minimal_app`
 
-Status: local implementation gates complete; four-platform CI pending.
+Status: complete; local gates and four-platform CI passed.
 
 ## Delivered boundary
 
@@ -28,8 +28,16 @@ Local evidence collected on Windows on 2026-10-15:
 | Web | `flutter build web --release --no-pub` | PASS, including Wasm dry run |
 | Windows | `flutter build windows --release --no-pub` | PASS |
 | Windows launch smoke | release executable remained alive for 8 seconds | PASS |
-| iOS | `flutter build ios --release --no-codesign --no-pub` | VERIFY: macOS CI pending |
+| iOS | `flutter build ios --release --no-codesign --no-pub` | PASS on macOS CI |
 
 The first Android attempt exposed a Kotlin incremental-cache failure because the Windows Pub cache and repository were on different drives. `kotlin.incremental=false` was added to the new app's Gradle properties; a clean rebuild then passed. This changes build performance only, not runtime behavior.
 
-Runtime capability claims remain limited by the [platform matrix](../capabilities/platform-matrix.md). The final CI run is recorded here at goal close.
+GitHub Actions run [38735231620](https://github.com/IbrahimIG1/mono_repo_template/actions/runs/38735231620) passed all five jobs against commit `5cfe873`:
+
+- workspace quality, tests, architecture gates, and temporary consumer: PASS;
+- Android debug APK: PASS;
+- iOS release no-codesign: PASS;
+- Web release: PASS;
+- Windows release: PASS.
+
+Runtime capability claims remain limited by the [platform matrix](../capabilities/platform-matrix.md).
