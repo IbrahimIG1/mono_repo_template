@@ -5,4 +5,7 @@ final class EmailPasswordCredential implements AuthCredential {
 
   final String email;
   final String password;
+
+  @override
+  String toString() => 'EmailPasswordCredential(<redacted>)';
 }

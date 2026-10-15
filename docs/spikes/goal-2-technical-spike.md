@@ -12,8 +12,8 @@ Baseline commit: `34e9caf`
 |---|---|---|
 | 1 | Pin toolchain; create explicit Pub Workspace and scratch members | One root resolution and member list |
 | 2 | Typed routes and legacy inclusion/exclusion | Stable second generation; recorded resolver results |
-| 3 | Web/Windows secure storage and browser WebSocket authentication | Runtime round trips and authenticated handshake log |
-| 4 | Melos comparison, Dart runner and four-platform workflow | Tooling ADR and committed CI workflow |
+| 3 | Platform-adapter risk probes under the scope active at that time | Recorded runtime observations; these are historical, not current support gates |
+| 4 | Melos comparison, Dart runner and platform workflow | Tooling ADR and committed CI workflow |
 | 5 | CI execution, fallback decisions and cleanup | Green/approved build matrix; disposable code removed |
 
 The estimate and timebox are exactly five working days. Finishing an experiment early does not expand its scope into production migration.
@@ -131,7 +131,10 @@ Decision: reject Melos for V2. The dependency was removed after the comparison. 
 
 ## CI pass/fail and fallbacks
 
-The spike workflow had independent Android, iOS, Web and Windows matrix executions plus Web/Windows runtime probes.
+The spike workflow executed the platform matrix that was active at the time.
+ADR-008 later narrowed current build gates to Android and iOS. The paused-target
+results below remain provenance only and are not required when this spike is
+repeated.
 
 | Gate | Pass | Failure fallback |
 |---|---|---|
@@ -139,10 +142,7 @@ The spike workflow had independent Android, iOS, Web and Windows matrix executio
 | Typed routes | First run current; second run byte-stable; Git diff empty | Pin compatible router/builder pair or defer typed routes; no handwritten/generated hybrid |
 | Android build | CI APK succeeds | Diagnose SDK/plugin constraint; do not lower target silently |
 | iOS build | CI no-codesign build succeeds | Pin compatible plugin/toolchain or mark affected capability Unsupported |
-| Web build | CI release build succeeds | Remove/replace incompatible adapter; do not claim Web support from analyzer only |
-| Windows build | CI release build succeeds | Split/omit unsupported adapter and mark capability status honestly |
-| Runtime storage probes | Real plugin round trip succeeds | Use an app-owned unsupported adapter or reassess plugin; never silently use plaintext |
-| Browser WebSocket | Server accepts one-time ticket and records Origin | Same-origin secure-cookie design or capability Unsupported until backend contract exists |
+| Mobile secure storage | Android/iOS adapter is covered by tests and scheduled for device validation | Use an app-owned unsupported adapter or reassess plugin; never silently use plaintext |
 
 ## Final CI evidence
 

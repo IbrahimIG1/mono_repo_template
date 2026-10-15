@@ -1,0 +1,8 @@
+{
+  "configVersion": 2,
+  "packages": [
+    {"name": "fixture_root", "rootUri": ".", "packageUri": "lib/"},
+    {"name": "a", "rootUri": "packages/a", "packageUri": "lib/"},
+    {"name": "b", "rootUri": "packages/b", "packageUri": "lib/"}
+  ]
+}

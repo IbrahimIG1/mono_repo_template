@@ -1,0 +1,51 @@
+name: V2 iOS
+
+on:
+  push:
+    branches: [main, "v2/**"]
+    paths:
+      - "packages/**"
+      - "apps/minimal_app/lib/**"
+      - "apps/minimal_app/ios/**"
+      - "apps/minimal_app/pubspec.yaml"
+      - "pubspec.yaml"
+      - "pubspec.lock"
+      - "analysis_options.yaml"
+      - "tool/**"
+      - ".github/workflows/v2-ios.yml"
+  pull_request:
+    paths:
+      - "packages/**"
+      - "apps/minimal_app/lib/**"
+      - "apps/minimal_app/ios/**"
+      - "apps/minimal_app/pubspec.yaml"
+      - "pubspec.yaml"
+      - "pubspec.lock"
+      - "analysis_options.yaml"
+      - "tool/**"
+      - ".github/workflows/v2-ios.yml"
+  release:
+    types: [published]
+  schedule:
+    - cron: "23 2 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: v2-ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-ios:
+    name: Build iOS (no codesign)
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.1
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - run: flutter build ios --release --no-codesign --no-pub
+        working-directory: apps/minimal_app

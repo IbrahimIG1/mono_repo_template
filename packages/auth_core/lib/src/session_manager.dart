@@ -46,7 +46,7 @@ final class SessionManager {
   AppFailure? _memoizedRefreshFailure;
   DateTime? _memoizedRefreshFailureAt;
   var _generation = 0;
-  var _restoreStarted = false;
+  Future<Result<void>>? _restoreOperation;
   var _disposed = false;
   Future<void> _storeTail = Future<void>.value();
 
@@ -55,11 +55,9 @@ final class SessionManager {
   int get generation => _generation;
   String? get currentAccessToken => _session?.accessToken;
 
-  Future<Result<void>> restore() async {
-    if (_restoreStarted) {
-      return const Success(null);
-    }
-    _restoreStarted = true;
+  Future<Result<void>> restore() => _restoreOperation ??= _performRestore();
+
+  Future<Result<void>> _performRestore() async {
     final operationGeneration = _generation;
     _publish(const AuthRestoring());
 
@@ -73,7 +71,15 @@ final class SessionManager {
         if (failure case AuthFailure(
           kind: AuthFailureKind.invalidStoredSession,
         )) {
-          await _serializeStore(_store.clear);
+          final clearResult = await _serializeStore(_store.clear);
+          if (!_isCurrent(operationGeneration)) {
+            return Failure(AuthFailure.staleOperation());
+          }
+          _publish(const AuthUnauthenticated());
+          if (clearResult case Failure<void>(:final failure)) {
+            return Failure(failure);
+          }
+          return Failure(failure);
         }
         _publish(const AuthUnauthenticated());
         return Failure(failure);
@@ -82,9 +88,13 @@ final class SessionManager {
         return const Success(null);
       case Success<AuthSession?>(:final value?):
         if (value.isExpiredAt(_clock())) {
-          await _serializeStore(_store.clear);
-          if (_isCurrent(operationGeneration)) {
-            _publish(const AuthUnauthenticated());
+          final clearResult = await _serializeStore(_store.clear);
+          if (!_isCurrent(operationGeneration)) {
+            return Failure(AuthFailure.staleOperation());
+          }
+          _publish(const AuthUnauthenticated());
+          if (clearResult case Failure<void>(:final failure)) {
+            return Failure(failure);
           }
           return const Success(null);
         }

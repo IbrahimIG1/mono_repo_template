@@ -2,6 +2,9 @@
 
 Status: Accepted and implemented.
 
+The meaning of `minimal_app` in this ADR is amended by ADR-009. Package
+ownership remains unchanged.
+
 ## Context
 
 The legacy `core` package combines global networking, global storage, UI helpers, Firebase, Bloc, and service-location concerns. Goal 3 needs a usable base without admitting or changing legacy consumers.
@@ -17,7 +20,7 @@ The first production workspace admits exactly four packages plus `minimal_app`:
 - `storage` owns typed key-value and secure-string contracts. Shared Preferences and Flutter Secure Storage adapters have separate library entry points; no adapter is global and broad clear operations are intentionally absent.
 - `design_system` owns brand-neutral Material theme tokens and presentation primitives. Product colors, fonts, assets, copy, and localization remain app-owned.
 
-`minimal_app` is the only composition root. It constructs lifecycle resources, injects interfaces, and disposes the network client. `core`, `shared`, and both legacy apps remain outside the workspace.
+`minimal_app` was the first composition root. It constructs lifecycle resources, injects interfaces, and disposes the network client. `core`, `shared`, and both legacy apps remain outside the workspace.
 
 ## Public entry points
 

@@ -1,0 +1,5 @@
+packages:
+  firebase_core:
+    dependency: transitive
+    source: hosted
+    version: 0.0.0

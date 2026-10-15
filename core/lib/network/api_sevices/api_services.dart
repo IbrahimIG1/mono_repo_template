@@ -249,8 +249,6 @@ class ApiServices {
         SharedPrefKeys.refreshToken,
         newToken.refreshToken,
       );
-      log("Access token ${newToken.accessToken}");
-      log("Refresh token ${newToken.refreshToken}");
       return newToken.accessToken;
     } on DioException catch (e) {
       if (e.response?.statusCode == 403 || e.response?.statusCode == 401) {

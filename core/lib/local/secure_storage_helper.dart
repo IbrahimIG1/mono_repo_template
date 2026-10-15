@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AppSecureStorageHelper {
@@ -7,7 +5,6 @@ class AppSecureStorageHelper {
 
   // Save a key-value pair
   static Future<void> saveToken(String key, String value) async {
-    log(" Saving key: $key with value: $value");
     await _storage.write(key: key, value: value);
   }
 

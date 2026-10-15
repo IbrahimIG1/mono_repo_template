@@ -48,6 +48,7 @@ final class AppComposition {
     required AuthGateway<EmailPasswordCredential> authGateway,
     required SessionGateway sessionGateway,
     String? initialLocation,
+    DestinationAuthorizer? destinationAuthorizer,
   }) => AppComposition._assemble(
     config: config,
     preferences: preferences,
@@ -55,6 +56,7 @@ final class AppComposition {
     authGateway: authGateway,
     sessionGateway: sessionGateway,
     initialLocation: initialLocation,
+    destinationAuthorizer: destinationAuthorizer,
   );
 
   factory AppComposition._assemble({
@@ -64,6 +66,7 @@ final class AppComposition {
     required AuthGateway<EmailPasswordCredential> authGateway,
     required SessionGateway sessionGateway,
     String? initialLocation,
+    DestinationAuthorizer? destinationAuthorizer,
   }) {
     const logger = NullLogger();
     final sessionManager = SessionManager(
@@ -91,6 +94,7 @@ final class AppComposition {
       appRouter: AppRouter(
         sessionManager: sessionManager,
         initialLocation: initialLocation,
+        destinationAuthorizer: destinationAuthorizer,
       ),
     );
   }

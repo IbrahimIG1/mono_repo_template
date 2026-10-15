@@ -16,10 +16,23 @@ Future<void> main(List<String> arguments) async {
       ? const ['format', 'analyze', 'test', 'routes']
       : [task];
   for (final currentTask in tasks) {
+    if (currentTask == 'format') {
+      await _formatRootSources();
+    }
     for (final package in packages) {
       await _runTask(currentTask, package);
     }
   }
+}
+
+Future<void> _formatRootSources() async {
+  stdout.writeln('\n[format] workspace root tools');
+  await _run('dart', const [
+    'format',
+    '--output=none',
+    '--set-exit-if-changed',
+    'tool',
+  ], Directory.current.absolute.path);
 }
 
 Future<List<_WorkspacePackage>> _workspacePackages() async {

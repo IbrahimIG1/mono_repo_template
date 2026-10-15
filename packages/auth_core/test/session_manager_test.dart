@@ -51,6 +51,85 @@ void main() {
       },
     );
 
+    test('inaccessible storage read fails restore without clearing', () async {
+      final readFailure = _storageFailure('auth.storage_read_failed');
+      final store = _RestoreFailureStore(readFailure: readFailure);
+      final manager = SessionManager(
+        store: store,
+        gateway: _gateway((_) async => Success(_newSession)),
+      );
+
+      final result = await manager.restore();
+
+      expect(result, isA<Failure<void>>());
+      expect((result as Failure<void>).failure, same(readFailure));
+      expect(store.clearCount, 0);
+      expect(manager.current, const AuthUnauthenticated());
+      await manager.dispose();
+    });
+
+    test('corrupt stored data is cleared and reports corruption', () async {
+      final corruptFailure = const AuthFailure(
+        kind: AuthFailureKind.invalidStoredSession,
+        code: 'auth.invalid_stored_session',
+        message: 'Stored session data is corrupt.',
+      );
+      final store = _RestoreFailureStore(readFailure: corruptFailure);
+      final manager = SessionManager(
+        store: store,
+        gateway: _gateway((_) async => Success(_newSession)),
+      );
+
+      final result = await manager.restore();
+
+      expect((result as Failure<void>).failure, same(corruptFailure));
+      expect(store.clearCount, 1);
+      expect(manager.current, const AuthUnauthenticated());
+      await manager.dispose();
+    });
+
+    test('clear failure while removing corrupt data is returned', () async {
+      const corruptFailure = AuthFailure(
+        kind: AuthFailureKind.invalidStoredSession,
+        code: 'auth.invalid_stored_session',
+        message: 'Stored session data is corrupt.',
+      );
+      final clearFailure = _storageFailure('auth.storage_clear_failed');
+      final store = _RestoreFailureStore(
+        readFailure: corruptFailure,
+        clearFailure: clearFailure,
+      );
+      final manager = SessionManager(
+        store: store,
+        gateway: _gateway((_) async => Success(_newSession)),
+      );
+
+      final result = await manager.restore();
+
+      expect((result as Failure<void>).failure, same(clearFailure));
+      expect(store.clearCount, 1);
+      expect(manager.current, const AuthUnauthenticated());
+      await manager.dispose();
+    });
+
+    test('concurrent restore calls share the same failure result', () async {
+      final readFailure = _storageFailure('auth.storage_read_failed');
+      final store = _RestoreFailureStore(readFailure: readFailure);
+      final manager = SessionManager(
+        store: store,
+        gateway: _gateway((_) async => Success(_newSession)),
+      );
+
+      final results = await Future.wait([manager.restore(), manager.restore()]);
+
+      expect(store.readCount, 1);
+      expect(
+        results.map((result) => (result as Failure<void>).failure),
+        everyElement(same(readFailure)),
+      );
+      await manager.dispose();
+    });
+
     test('twenty concurrent unauthorized requests share one refresh', () async {
       final completer = Completer<Result<AuthSession>>();
       final gateway = _gateway((_) => completer.future);
@@ -294,6 +373,37 @@ final _newSession = AuthSession(
 
 final class _Credential implements AuthCredential {
   const _Credential();
+}
+
+AuthFailure _storageFailure(String code) => AuthFailure(
+  kind: AuthFailureKind.storage,
+  code: code,
+  message: 'Secure storage is unavailable.',
+);
+
+final class _RestoreFailureStore implements SessionStore {
+  _RestoreFailureStore({required this.readFailure, this.clearFailure});
+
+  final AppFailure readFailure;
+  final AppFailure? clearFailure;
+  var readCount = 0;
+  var clearCount = 0;
+
+  @override
+  Future<Result<void>> clear() async {
+    clearCount++;
+    final failure = clearFailure;
+    return failure == null ? const Success(null) : Failure(failure);
+  }
+
+  @override
+  Future<Result<AuthSession?>> read() async {
+    readCount++;
+    return Failure(readFailure);
+  }
+
+  @override
+  Future<Result<void>> write(AuthSession session) async => const Success(null);
 }
 
 final class _ControlledWriteStore implements SessionStore {

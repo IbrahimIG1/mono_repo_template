@@ -4,12 +4,13 @@ Allowed states are **Supported**, **Unsupported**, **Experimental**, and **Manua
 
 | Capability | Android | iOS | Web | Windows | Evidence / limitation |
 |---|---|---|---|---|---|
-| Foundation contracts and redaction | Supported | Supported | Supported | Supported | Pure-Dart unit tests; no platform API |
-| Design system primitives | Manual-validation-required | Manual-validation-required | Manual-validation-required | Manual-validation-required | Widget tests and builds; visual/accessibility review remains manual |
-| Dio HTTP adapter | Manual-validation-required | Manual-validation-required | Manual-validation-required | Manual-validation-required | Deterministic adapter tests and builds; real backend/TLS lifecycle not exercised |
-| Shared Preferences adapter | Manual-validation-required | Manual-validation-required | Manual-validation-required | Manual-validation-required | Adapter compiles; Goal 3 does not claim per-platform persistence lifecycle validation |
-| Secure storage adapter | Manual-validation-required | Manual-validation-required | Experimental | Manual-validation-required | Goal 2 verified Web/Windows round trips; Web plugin behavior is documented experimental; packaged/upgrade lifecycle remains unverified |
-| Auth contracts and session orchestration | Supported | Supported | Supported | Supported | Pure-Dart state, persistence-ordering, refresh concurrency, stale-generation and cooldown tests |
-| Auth secure persistence | Manual-validation-required | Manual-validation-required | Experimental | Manual-validation-required | App adapter tests JSON/error behavior; platform status inherits secure-storage limitations |
-| Typed routing and auth redirects | Manual-validation-required | Manual-validation-required | Manual-validation-required | Manual-validation-required | Generated-route stability and widget tests cover protected internal destinations; OS/browser launch integration remains manual |
-| `minimal_app` | Manual-validation-required | Manual-validation-required | Manual-validation-required | Manual-validation-required | Automated builds and widget test; release-device smoke validation remains required |
+| Foundation contracts and redaction | Supported | Supported | Unsupported | Unsupported | Pure-Dart tests cover the contracts; Web and Windows validation is paused, not deleted |
+| Design system primitives | Manual-validation-required | Manual-validation-required | Unsupported | Unsupported | Mobile widget/build evidence exists; Web and Windows validation is paused |
+| Dio HTTP adapter | Manual-validation-required | Manual-validation-required | Unsupported | Unsupported | Mobile real-backend/TLS lifecycle remains unverified; Web and Windows validation is paused |
+| Shared Preferences adapter | Manual-validation-required | Manual-validation-required | Unsupported | Unsupported | Mobile persistence lifecycle needs device validation; Web and Windows validation is paused |
+| Secure storage adapter | Manual-validation-required | Manual-validation-required | Unsupported | Unsupported | Mobile lifecycle needs device validation; prior desktop/browser probes are historical and those targets are now paused |
+| Auth contracts and session orchestration | Supported | Supported | Unsupported | Unsupported | Pure-Dart tests cover orchestration; Web and Windows product support is paused |
+| Auth secure persistence | Manual-validation-required | Manual-validation-required | Unsupported | Unsupported | Mobile adapter behavior needs device validation; Web and Windows validation is paused |
+| Typed routing and auth redirects | Manual-validation-required | Manual-validation-required | Unsupported | Unsupported | Mobile OS launch integration remains manual; Web and Windows validation is paused |
+| Push notifications and notification routing | Manual-validation-required | Manual-validation-required | Unsupported | Unsupported | Goal 5 requires recorded device validation; Web and Windows are paused |
+| `minimal_app` | Manual-validation-required | Manual-validation-required | Unsupported | Unsupported | Android/iOS builds are automated; release-device smoke validation remains required; Web and Windows are paused |

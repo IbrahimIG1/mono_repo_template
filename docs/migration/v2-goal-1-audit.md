@@ -39,7 +39,7 @@ The repository contains 584 tracked files and 137 tracked Dart files. The unexpe
 
 ### Applications and platforms
 
-Both apps currently contain generated Android, iOS, Web, Windows, Linux and macOS directories. V2 targets Android, iOS, Web and Windows. Linux and macOS directories are not deleted in Goal 1.
+Both apps currently contain generated Android, iOS, Web, Windows, Linux and macOS directories. V2 now targets Android and iOS. Web and Windows validation is paused under ADR-008; no generated platform directory is deleted as a consequence of that scope change.
 
 `user_app` has Android `dev` and `pro` product flavors. Equivalent iOS/Windows/Web flavor configuration is not present. `admin_app` has no flavors even though the VS Code launch configuration declares them.
 
@@ -189,7 +189,7 @@ A package/app may use `resolution: workspace` only after all applicable gates pa
 - Repair admin VS Code launch entries.
 - Decide whether empty generated localization should be regenerated from real ARB content.
 - Add or document required Firebase configuration per app/platform; do not add credentials to shared packages.
-- Re-run Android/Windows builds with CI-grade timeouts and full logs.
+- Re-run Android builds with CI-grade timeouts and full logs; validate iOS on macOS CI.
 
 ## Locked architecture decisions
 
@@ -206,5 +206,8 @@ The contracts and ownership decisions required by Goal 1 are recorded in:
 - The audit branch is clean or its documentation changes are checkpointed.
 - No user changes are pending without an owner.
 - Spike work is isolated from legacy source migration.
-- The spike validates workspace resolution, typed routes, four platform builds, secure storage on Web/Windows, browser WebSocket authentication and Melos-versus-Dart orchestration.
+- The spike validates workspace resolution, typed routes, Android/iOS builds,
+  mobile secure-storage integration assumptions and Melos-versus-Dart
+  orchestration. Historical paused-platform probes do not remain current exit
+  criteria.
 - A failed spike selects a documented fallback; it does not silently lower a capability claim.

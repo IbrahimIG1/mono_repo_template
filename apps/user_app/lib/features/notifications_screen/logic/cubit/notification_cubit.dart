@@ -21,11 +21,9 @@ class NotificationCubit extends Cubit<NotificationState> {
     final result = await notificationFactory.getFCMToken();
     result.fold(
       (error) {
-        // log("Error In Get FCM Token :- ${error.errormsg}");
         emit(GetFCMTokenError(error)); // Emit error state
       },
       (success) async {
-        log("Get FCM Token In Cubit :- $success");
         await sendTokenToBackend(success);
         emit(GetFCMTokenSuccess());
       },
@@ -39,11 +37,9 @@ class NotificationCubit extends Cubit<NotificationState> {
     );
     success.fold(
       (error) {
-        log("Error In Send Token :- ${error.toString()}");
         emit(SendFCMTokenError(error)); // Emit error state
       },
-      (success) {
-        log("Send FCM Token To backend In Cubit :- $token");
+      (_) {
         emit(GetFCMTokenSuccess());
       },
     );
