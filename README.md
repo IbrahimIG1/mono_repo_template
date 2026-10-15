@@ -47,10 +47,18 @@ Install the Flutter version declared in `.fvmrc`, then run from the repository r
 ```powershell
 flutter pub get --enforce-lockfile
 dart run tool/workspace.dart verify
-dart analyze tool
+dart analyze --fatal-warnings --fatal-infos
+dart test tool/test
 dart run tool/check_architecture.dart
 dart run tool/verify_temporary_consumer.dart
 ```
+
+The root formatting gate is `dart run tool/workspace.dart format`. It derives
+admitted packages from Pub Workspace configuration and includes root `tool/`
+sources. Do not replace it with `dart format .`: Dart's formatter recursively
+walks build artifacts and has no directory-exclusion option. Root analysis
+excludes only not-yet-admitted legacy paths and generated build artifacts in
+`analysis_options.yaml`.
 
 Run the reference app:
 
