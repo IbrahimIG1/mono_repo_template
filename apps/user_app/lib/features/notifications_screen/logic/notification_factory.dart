@@ -55,13 +55,11 @@ class NotificationFactory {
 
   // Get the current FCM token
   Future<Either<dynamic, String>> getFCMToken() async {
-    log("Get FCM Token In Factory Function");
     try {
       final response = await _firebaseMessaging.getToken();
 
       return right(response.toString());
     } on FirebaseException catch (e) {
-      log("Error In Get FCM Token :- ${e.toString()}");
       return left(FirebaseMessagingHandler.handleMessagingError(e));
     } catch (e) {
       return left(ErrorModel(message: e.toString()));
@@ -70,7 +68,6 @@ class NotificationFactory {
 
   // Listen for token refresh
   void onTokenRefresh(void Function(String token) callback) {
-    log("Refresh FCM Token In Factory Function");
     _firebaseMessaging.onTokenRefresh.listen(callback);
   }
 }
