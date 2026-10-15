@@ -55,10 +55,8 @@ dart run tool/verify_temporary_consumer.dart
 
 The root formatting gate is `dart run tool/workspace.dart format`. It derives
 admitted packages from Pub Workspace configuration and includes root `tool/`
-sources. Do not replace it with `dart format .`: Dart's formatter recursively
-walks build artifacts and has no directory-exclusion option. Root analysis
-excludes only not-yet-admitted legacy paths and generated build artifacts in
-`analysis_options.yaml`.
+sources, while generated build artifacts and not-yet-admitted legacy paths stay
+outside the gate through the documented workspace policy.
 
 Run the reference app:
 
