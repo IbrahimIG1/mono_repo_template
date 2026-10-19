@@ -56,5 +56,7 @@ jobs:
       - run: flutter pub get --enforce-lockfile
       - run: flutter build ios --release --no-codesign --no-pub
         working-directory: apps/minimal_app
+      - run: flutter build ios --release --no-codesign --no-pub
+        working-directory: apps/showcase_app
       - run: dart run tool/verify_optional_capabilities.dart --ios
       - run: git diff --exit-code

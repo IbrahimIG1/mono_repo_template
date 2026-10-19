@@ -17,6 +17,7 @@ final class ArchitecturePolicy {
   static const production = ArchitecturePolicy(
     workspaceMembers: {
       'minimal_app',
+      'showcase_app',
       'auth_core',
       'auth_ui',
       'design_system',
@@ -38,6 +39,7 @@ final class ArchitecturePolicy {
         'platform_foundation',
         'storage',
       },
+      'showcase_app': {'design_system', 'platform_foundation'},
       'auth_core': {'platform_foundation'},
       'auth_ui': {'auth_core', 'platform_foundation'},
       'design_system': <String>{},
@@ -52,7 +54,7 @@ final class ArchitecturePolicy {
     minimalApp: 'minimal_app',
     authCore: 'auth_core',
     pureCapabilityCores: {'auth_core', 'notifications_core', 'realtime_core'},
-    sourceRoots: ['apps/minimal_app/lib', 'packages'],
+    sourceRoots: ['apps/minimal_app/lib', 'apps/showcase_app/lib', 'packages'],
     presentationRoots: ['packages/auth_ui/lib', 'apps/minimal_app/lib/src/ui'],
   );
 
