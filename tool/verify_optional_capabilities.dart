@@ -341,15 +341,39 @@ Set<String> _runtimeDependencies(Map<String, Object?> package) {
   return direct.difference(development);
 }
 
-Future<void> _build(Directory app, String platform) => platform == 'ios'
-    ? _run('flutter', const [
-        'build',
-        'ios',
-        '--debug',
-        '--no-codesign',
-        '--no-pub',
-      ], app.path)
-    : _run('flutter', const ['build', 'apk', '--debug', '--no-pub'], app.path);
+Future<void> _build(Directory app, String platform) async {
+  final arguments = platform == 'ios'
+      ? const ['build', 'ios', '--debug', '--no-codesign', '--no-pub']
+      : const ['build', 'apk', '--debug', '--no-pub'];
+
+  try {
+    await _run('flutter', arguments, app.path);
+  } on ProcessException {
+    if (platform != 'ios') {
+      rethrow;
+    }
+    // Xcode can leave a partially downloaded Firebase binary in the shared
+    // SwiftPM cache. Remove only that cache and retry once; a second failure
+    // still propagates the original gate failure.
+    await _clearSwiftPackageArtifacts();
+    await Future<void>.delayed(const Duration(seconds: 2));
+    await _run('flutter', arguments, app.path);
+  }
+}
+
+Future<void> _clearSwiftPackageArtifacts() async {
+  final home = Platform.environment['HOME'];
+  if (home == null || home.isEmpty) {
+    return;
+  }
+  final artifacts = Directory(
+    '$home${Platform.pathSeparator}Library${Platform.pathSeparator}Caches'
+    '${Platform.pathSeparator}org.swift.swiftpm${Platform.pathSeparator}artifacts',
+  );
+  if (artifacts.existsSync()) {
+    await artifacts.delete(recursive: true);
+  }
+}
 
 Future<void> _run(
   String executable,
