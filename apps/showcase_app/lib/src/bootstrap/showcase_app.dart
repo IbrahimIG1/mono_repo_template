@@ -3,6 +3,7 @@ import 'package:platform_foundation/platform_foundation.dart';
 
 import 'showcase_config.dart';
 import 'showcase_theme.dart';
+import '../localization/showcase_localizations.dart';
 
 final class ShowcaseApp extends StatelessWidget {
   const ShowcaseApp({required this.config, required this.logger, super.key});
@@ -13,7 +14,10 @@ final class ShowcaseApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: config.appTitle,
+    onGenerateTitle: (context) =>
+        ShowcaseLocalizations.of(context).appTitle(config.environment.name),
+    localizationsDelegates: const [ShowcaseLocalizations.delegate],
+    supportedLocales: ShowcaseLocalizations.supportedLocales,
     theme: ShowcaseTheme.light(),
     home: _BootstrapScreen(config: config),
   );
@@ -29,7 +33,9 @@ final class _BootstrapScreen extends StatelessWidget {
     appBar: AppBar(title: Text(config.appTitle)),
     body: Center(
       child: Text(
-        'Bootstrap ready for ${config.environment.name}.',
+        ShowcaseLocalizations.of(
+          context,
+        ).bootstrapReady(config.environment.name),
         textAlign: TextAlign.center,
       ),
     ),

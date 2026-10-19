@@ -1,6 +1,6 @@
 # V2 Goal 6 — Showcase bootstrap/configuration slice
 
-Status: complete for slices 1–2; localization is next
+Status: complete for slices 1–3; routing is next
 
 ## Scope
 
@@ -32,6 +32,8 @@ available until the relevant parity tests pass in a later slice.
 - `design_system` supplies the neutral theme.
 - `showcase_app` supplies the product seed color through `ShowcaseTheme`; the
   shared package does not absorb legacy singleton branding state.
+- Localization is app-owned through a typed delegate with an explicit English
+  support boundary; legacy generated localization remains untouched.
 - API endpoints, Firebase files, localization content, routes, and product
   assets remain app-owned and are intentionally absent from this bootstrap.
 

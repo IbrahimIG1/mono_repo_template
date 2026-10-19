@@ -82,12 +82,13 @@ legacy paths and compatibility exports until behavior, storage, routes, assets,
 and mobile builds reach documented parity. Do not convert `user_app` or
 `admin_app` in place.
 
-Completed slices: bootstrap/configuration and design system. `apps/showcase_app`
+Completed slices: bootstrap/configuration, design system, and localization.
+`apps/showcase_app`
 is a new Android/iOS reference app using only `platform_foundation` and
 `design_system`; its typed environment config, app-owned brand composition, and
 parity inventory are recorded in
 `docs/migration/v2-goal-6-showcase-bootstrap.md`. The remaining slices stay
-ordered: localization, routing shell, login/session,
+ordered: routing shell, login/session,
 register/OTP/reset, onboarding/language, notification example, then remaining
 useful screens. No legacy implementation is removed in this slice.
 

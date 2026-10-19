@@ -27,6 +27,14 @@ void main() {
     expect(ShowcaseTheme.brandSeed, const Color(0xFFB4953D));
     expect(ShowcaseTheme.light().useMaterial3, isTrue);
   });
+
+  test('localization is app-owned and has an explicit supported locale', () {
+    expect(ShowcaseLocalizations.supportedLocales, const [Locale('en')]);
+    expect(
+      const ShowcaseLocalizations(Locale('en')).appTitle('production'),
+      'Showcase',
+    );
+  });
 }
 
 final class _RecordingLogger implements AppLogger {
