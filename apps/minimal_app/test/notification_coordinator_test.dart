@@ -200,7 +200,10 @@ void main() {
       sessionManager: sessionManager,
       navigator: navigator,
       routerReady: Future.value(),
-      onUnexpectedError: (error, _) => errors.add(error),
+      onUnexpectedError: (error, _) {
+        errors.add(error);
+        throw StateError('synthetic diagnostics failure');
+      },
     )..start();
 
     client.addInteraction(_interaction('first', itemId: 'first'));

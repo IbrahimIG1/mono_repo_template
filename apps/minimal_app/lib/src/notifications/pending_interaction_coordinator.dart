@@ -56,10 +56,18 @@ final class PendingInteractionCoordinator {
         try {
           await _handle(interaction);
         } on Object catch (error, stackTrace) {
-          onUnexpectedError?.call(error, stackTrace);
+          _reportUnexpectedError(error, stackTrace);
         }
       });
     });
+  }
+
+  void _reportUnexpectedError(Object error, StackTrace stackTrace) {
+    try {
+      onUnexpectedError?.call(error, stackTrace);
+    } on Object {
+      // Diagnostics must never break delivery of later interactions.
+    }
   }
 
   Future<void> _handle(NotificationInteraction interaction) async {
