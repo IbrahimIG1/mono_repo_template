@@ -110,6 +110,10 @@ integration so the record points at the exact authoritative commit.
   owned `lib/` source explicitly, while still removing the generated `build/`
   tree before proving the opt-out build. Source scope, cleanup, and deployment-
   target behavior have unit tests, and failing command output is preserved.
+- The Intel macOS 15 runner then proved too old for Firebase iOS SDK 13's Swift
+  tools 6.2.1 manifest. CI is pinned to GitHub's GA `macos-26` standard runner,
+  whose official image inventory provides Xcode 26. This is a toolchain
+  compatibility requirement, not a runtime-support claim.
 - Physical-device push receipt, notification taps from foreground/background/
   terminated states, APNs provisioning, and OS deep-link launch behavior were
   not run because this environment has no provisioned Android/iOS devices or

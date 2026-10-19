@@ -37,7 +37,9 @@ concurrency:
 jobs:
   build-ios:
     name: Build iOS (no codesign)
-    runs-on: macos-15-intel
+    # Firebase iOS SDK 13 uses Swift tools 6.2.1. Pin the GA macOS 26 image so
+    # dependency resolution uses Xcode 26 instead of macOS 15's Xcode 16.
+    runs-on: macos-26
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
