@@ -14,3 +14,7 @@ An app needing background persistence should replace it with an app-owned
 top-level handler that constructs isolate-safe dependencies locally.
 
 No Firebase configuration or production credentials belong in this package.
+
+The Firebase versions in the pinned Goal 5 lockfile require an iOS 15.0 minimum
+deployment target. Apps must set that target in Xcode and, when applicable,
+their Podfile, then re-check the constraint when upgrading Firebase dependencies.

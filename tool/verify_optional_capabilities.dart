@@ -28,6 +28,9 @@ Future<void> main(List<String> arguments) async {
       '--org=com.example.capabilities',
       'consumer_app',
     ], appsDirectory.path);
+    if (platform == 'ios') {
+      await configureIosMinimumVersionForRehearsal(appDirectory);
+    }
     await _writeWorkspacePubspec(temporaryRoot);
 
     await _writeAppPubspec(appDirectory, includeOptionalCapabilities: true);
@@ -58,6 +61,25 @@ Future<void> main(List<String> arguments) async {
       await temporaryRoot.delete(recursive: true);
     }
   }
+}
+
+Future<void> configureIosMinimumVersionForRehearsal(Directory app) async {
+  const minimumVersion = '15.0';
+  final project = File(
+    '${app.path}${Platform.pathSeparator}ios${Platform.pathSeparator}Runner.xcodeproj'
+    '${Platform.pathSeparator}project.pbxproj',
+  );
+  final projectContent = await project.readAsString();
+  final deploymentPattern = RegExp(r'IPHONEOS_DEPLOYMENT_TARGET = [^;]+;');
+  if (!deploymentPattern.hasMatch(projectContent)) {
+    throw StateError('Generated Xcode project has no deployment target.');
+  }
+  await project.writeAsString(
+    projectContent.replaceAll(
+      deploymentPattern,
+      'IPHONEOS_DEPLOYMENT_TARGET = $minimumVersion;',
+    ),
+  );
 }
 
 Future<void> _copyPackages(

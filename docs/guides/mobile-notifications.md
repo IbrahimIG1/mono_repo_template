@@ -33,6 +33,12 @@ not navigate or assume a foreground router from the background isolate.
 
 ## iOS and APNs
 
+The Firebase packages resolved by the pinned Goal 5 lockfile declare iOS 15.0
+as their minimum deployment target. Set the app target to iOS 15.0 or newer;
+CocoaPods apps must set the Podfile platform as well. Re-verify this constraint
+whenever Firebase dependencies change; do not assume a future release keeps the
+same minimum.
+
 1. Enable Push Notifications and the Background Modes / Remote notifications
    capability for the app target in Xcode.
 2. Register the exact bundle identifier in the Firebase project and deliver the
