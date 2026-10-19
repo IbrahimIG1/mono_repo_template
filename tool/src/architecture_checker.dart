@@ -31,6 +31,7 @@ final class ArchitecturePolicy {
         'auth_ui',
         'design_system',
         'networking',
+        'notifications_core',
         'platform_foundation',
         'storage',
       },

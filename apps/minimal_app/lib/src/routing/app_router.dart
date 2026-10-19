@@ -41,6 +41,24 @@ final class AppRouter {
     _refresh.dispose();
   }
 
+  void openNotificationDestination(String source) {
+    final destination = AppDestinationPolicy.safeInternalDestination(source);
+    if (destination == null) {
+      return;
+    }
+    final state = _sessionManager.current;
+    final session = switch (state) {
+      AuthAuthenticated(:final session) => session,
+      AuthRefreshing(:final previousSession) => previousSession,
+      _ => null,
+    };
+    if (session != null &&
+        !_destinationAuthorizer(Uri.parse(destination), session)) {
+      return;
+    }
+    router.go(destination);
+  }
+
   String? _redirect(BuildContext _, GoRouterState state) {
     final authState = _sessionManager.current;
     final uri = state.uri;
