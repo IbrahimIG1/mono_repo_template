@@ -93,6 +93,13 @@ isolated and regression-tested before this final verification.
   [run 39294681735](https://github.com/IbrahimIG1/mono_repo_template/actions/runs/39294681735)
   — PASS on `d803ceb` using Xcode 26.
 
+- Main integration Android/quality workflow:
+  [run 39303415627](https://github.com/IbrahimIG1/mono_repo_template/actions/runs/39303415627)
+  — PASS on merge commit `7fc7439`.
+- Main integration iOS no-codesign workflow:
+  [run 39303415553](https://github.com/IbrahimIG1/mono_repo_template/actions/runs/39303415553)
+  — PASS on merge commit `7fc7439` after clearing stale SwiftPM artifacts.
+
 These compile and contract-test mobile integrations; they are not physical
 device proof. The main-branch merge runs and checkpoint tag are appended during
 integration so the record points at the exact authoritative commit.
