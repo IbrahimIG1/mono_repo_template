@@ -43,6 +43,11 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+      # Firebase's SwiftPM binary cache can retain partially downloaded
+      # artifacts between jobs. Clear only that runner-local cache so Xcode
+      # resolves a clean set of packages for this validation.
+      - name: Clear SwiftPM binary artifact cache
+        run: rm -rf "$HOME/Library/Caches/org.swift.swiftpm/artifacts"
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.44.1
