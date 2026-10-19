@@ -2,7 +2,7 @@
 
 Status: Active. ADR-008 makes V2 mobile-first; Web and Windows validation is
 paused. Complete, verify, integrate, and checkpoint one goal before starting the
-next. Goals 1 through 4.5 are closed; Goal 5 is the active implementation goal.
+next. Goals 1 through 4.5 are closed; Goal 5 is awaiting final CI and integration.
 
 Every goal follows the Git lifecycle in `AGENTS.md`. Existing mobile tests and
 quality gates remain mandatory even when a capability is not part of that goal.
@@ -54,7 +54,7 @@ gates, legacy secret logging, the tracked temporary dependency tree, minimal-app
 scope, checkpoints, clean-clone instructions, and an evidence-based Goals 1–4
 verification report. No Goal 5 implementation belongs here.
 
-## Goal 5 — Notifications, notification routing, and realtime contracts (active)
+## Goal 5 — Notifications, notification routing, and realtime contracts (verification)
 
 Deliver `notifications_core`, the optional mobile FCM adapter, app-owned
 destination mapping/coordinator, `realtime_core`, one selected transport adapter,
