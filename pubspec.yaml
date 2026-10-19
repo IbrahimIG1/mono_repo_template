@@ -15,6 +15,7 @@ workspace:
   - packages/notifications_fcm
   - packages/platform_foundation
   - packages/realtime_core
+  - packages/realtime_websocket
   - packages/storage
 
 dev_dependencies:

@@ -24,6 +24,7 @@ final class ArchitecturePolicy {
       'notifications_fcm',
       'platform_foundation',
       'realtime_core',
+      'realtime_websocket',
       'storage',
     },
     allowedLocalDependencies: {
@@ -44,6 +45,7 @@ final class ArchitecturePolicy {
       'notifications_fcm': {'notifications_core', 'platform_foundation'},
       'platform_foundation': <String>{},
       'realtime_core': {'platform_foundation'},
+      'realtime_websocket': {'platform_foundation', 'realtime_core'},
       'storage': {'platform_foundation'},
     },
     minimalApp: 'minimal_app',
