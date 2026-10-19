@@ -50,3 +50,4 @@ jobs:
       - run: flutter build ios --release --no-codesign --no-pub
         working-directory: apps/minimal_app
       - run: dart run tool/verify_optional_capabilities.dart --ios
+      - run: git diff --exit-code

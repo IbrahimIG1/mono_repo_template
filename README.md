@@ -56,6 +56,7 @@ dart test tool/test
 dart run tool/check_architecture.dart
 dart run tool/verify_temporary_consumer.dart
 dart run tool/verify_optional_capabilities.dart --android
+git diff --exit-code
 ```
 
 The root formatting gate is `dart run tool/workspace.dart format`. It derives

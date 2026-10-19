@@ -27,6 +27,7 @@ jobs:
       - run: dart run tool/check_architecture.dart
       - run: dart run tool/verify_temporary_consumer.dart
       - run: dart run tool/verify_optional_capabilities.dart --android
+      - run: git diff --exit-code
 
   build-android:
     name: Build Android
