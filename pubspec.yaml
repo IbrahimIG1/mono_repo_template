@@ -14,6 +14,7 @@ workspace:
   - packages/notifications_core
   - packages/notifications_fcm
   - packages/platform_foundation
+  - packages/realtime_core
   - packages/storage
 
 dev_dependencies:
