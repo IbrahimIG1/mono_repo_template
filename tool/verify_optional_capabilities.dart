@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+const optionalCapabilityAnalyzeArguments = <String>['analyze', 'lib'];
+
 Future<void> main(List<String> arguments) async {
   try {
     await _runVerification(arguments);
@@ -56,7 +58,11 @@ Future<void> _runVerification(List<String> arguments) async {
       temporaryRoot,
       expectsOptionalCapabilities: true,
     );
-    await _run('flutter', const ['analyze'], appDirectory.path);
+    await _run(
+      'flutter',
+      optionalCapabilityAnalyzeArguments,
+      appDirectory.path,
+    );
     await _build(appDirectory, platform);
 
     // The iOS Swift Package Manager checkout can contain Dart test fixtures.
@@ -71,7 +77,11 @@ Future<void> _runVerification(List<String> arguments) async {
       temporaryRoot,
       expectsOptionalCapabilities: false,
     );
-    await _run('flutter', const ['analyze'], appDirectory.path);
+    await _run(
+      'flutter',
+      optionalCapabilityAnalyzeArguments,
+      appDirectory.path,
+    );
     await _build(appDirectory, platform);
 
     stdout.writeln(

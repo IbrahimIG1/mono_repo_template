@@ -5,6 +5,14 @@ import 'package:test/test.dart';
 import '../verify_optional_capabilities.dart';
 
 void main() {
+  test(
+    'rehearsal analyzes owned Dart source instead of generated products',
+    () {
+      expect(optionalCapabilityAnalyzeArguments, ['analyze', 'lib']);
+      expect(optionalCapabilityAnalyzeArguments, isNot(contains('build')));
+    },
+  );
+
   test('opt-out rehearsal removes opt-in build products only', () async {
     final root = await Directory.systemTemp.createTemp(
       'capability-clean-test-',

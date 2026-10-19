@@ -105,10 +105,11 @@ integration so the record points at the exact authoritative commit.
 - The optional-capability rehearsal initially exposed iOS deployment-target and
   diagnostic gaps. A later iOS run also showed that `flutter analyze` after the
   opt-in build scanned Dart fixtures inside Swift Package Manager's generated
-  `build/ios/SourcePackages` checkout. The rehearsal now removes only the
-  generated `build/` tree before proving the opt-out state. Both cleanup and
-  deployment-target behavior have unit tests, and failing command output is
-  preserved.
+  `build/ios/SourcePackages` checkout. Because `flutter pub get` can materialize
+  that checkout before the build starts, the disposable app now analyzes its
+  owned `lib/` source explicitly, while still removing the generated `build/`
+  tree before proving the opt-out build. Source scope, cleanup, and deployment-
+  target behavior have unit tests, and failing command output is preserved.
 - Physical-device push receipt, notification taps from foreground/background/
   terminated states, APNs provisioning, and OS deep-link launch behavior were
   not run because this environment has no provisioned Android/iOS devices or
