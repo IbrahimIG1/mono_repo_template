@@ -89,7 +89,31 @@ Future<void> _runVerification(List<String> arguments) async {
     );
   } finally {
     if (temporaryRoot.existsSync()) {
-      await temporaryRoot.delete(recursive: true);
+      await deleteTemporaryRoot(temporaryRoot);
+    }
+  }
+}
+
+/// Removes a rehearsal workspace without making a successful verification fail
+/// because the host OS is still releasing a build file. iOS toolchains can keep
+/// a package-cache file open briefly after the build process exits.
+Future<void> deleteTemporaryRoot(Directory root) async {
+  const attempts = 8;
+  for (var attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      if (root.existsSync()) {
+        await root.delete(recursive: true);
+      }
+      return;
+    } on FileSystemException catch (error) {
+      if (attempt == attempts) {
+        stderr.writeln(
+          'WARNING: could not remove temporary rehearsal workspace '
+          '${root.path}: $error',
+        );
+        return;
+      }
+      await Future<void>.delayed(Duration(milliseconds: attempt * 250));
     }
   }
 }
