@@ -11,7 +11,11 @@ workspace:
   - packages/auth_ui
   - packages/design_system
   - packages/networking
+  - packages/notifications_core
+  - packages/notifications_fcm
   - packages/platform_foundation
+  - packages/realtime_core
+  - packages/realtime_websocket
   - packages/storage
 
 dev_dependencies:

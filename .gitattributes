@@ -1,0 +1,6 @@
+# Dart and Flutter generators emit LF on every host. Keep checkout normalization
+# aligned with those tools so verification does not leave false CRLF-only edits.
+*.dart text eol=lf
+*.cc text eol=lf
+*.h text eol=lf
+*.cmake text eol=lf

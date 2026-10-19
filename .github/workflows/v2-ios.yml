@@ -2,7 +2,7 @@ name: V2 iOS
 
 on:
   push:
-    branches: [main, "v2/**"]
+    branches: [main, "v2/**", "goal-*"]
     paths:
       - "packages/**"
       - "apps/minimal_app/lib/**"
@@ -37,8 +37,10 @@ concurrency:
 jobs:
   build-ios:
     name: Build iOS (no codesign)
-    runs-on: macos-latest
-    timeout-minutes: 30
+    # Firebase iOS SDK 13 uses Swift tools 6.2.1. Pin the GA macOS 26 image so
+    # dependency resolution uses Xcode 26 instead of macOS 15's Xcode 16.
+    runs-on: macos-26
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -49,3 +51,5 @@ jobs:
       - run: flutter pub get --enforce-lockfile
       - run: flutter build ios --release --no-codesign --no-pub
         working-directory: apps/minimal_app
+      - run: dart run tool/verify_optional_capabilities.dart --ios
+      - run: git diff --exit-code

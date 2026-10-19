@@ -11,6 +11,7 @@ final class ArchitecturePolicy {
     required this.sourceRoots,
     required this.presentationRoots,
     this.authCore,
+    this.pureCapabilityCores = const {},
   });
 
   static const production = ArchitecturePolicy(
@@ -20,7 +21,11 @@ final class ArchitecturePolicy {
       'auth_ui',
       'design_system',
       'networking',
+      'notifications_core',
+      'notifications_fcm',
       'platform_foundation',
+      'realtime_core',
+      'realtime_websocket',
       'storage',
     },
     allowedLocalDependencies: {
@@ -29,6 +34,7 @@ final class ArchitecturePolicy {
         'auth_ui',
         'design_system',
         'networking',
+        'notifications_core',
         'platform_foundation',
         'storage',
       },
@@ -36,11 +42,16 @@ final class ArchitecturePolicy {
       'auth_ui': {'auth_core', 'platform_foundation'},
       'design_system': <String>{},
       'networking': {'platform_foundation'},
+      'notifications_core': {'platform_foundation'},
+      'notifications_fcm': {'notifications_core', 'platform_foundation'},
       'platform_foundation': <String>{},
+      'realtime_core': {'platform_foundation'},
+      'realtime_websocket': {'platform_foundation', 'realtime_core'},
       'storage': {'platform_foundation'},
     },
     minimalApp: 'minimal_app',
     authCore: 'auth_core',
+    pureCapabilityCores: {'auth_core', 'notifications_core', 'realtime_core'},
     sourceRoots: ['apps/minimal_app/lib', 'packages'],
     presentationRoots: ['packages/auth_ui/lib', 'apps/minimal_app/lib/src/ui'],
   );
@@ -49,6 +60,7 @@ final class ArchitecturePolicy {
   final Map<String, Set<String>> allowedLocalDependencies;
   final String minimalApp;
   final String? authCore;
+  final Set<String> pureCapabilityCores;
   final List<String> sourceRoots;
   final List<String> presentationRoots;
 }
@@ -77,6 +89,7 @@ final class ArchitectureChecker {
     _checkCycles(graph, violations);
     _checkMinimalRuntimeClosure(graph, violations);
     _checkAuthCoreClosure(graph, violations);
+    _checkPureCapabilityCores(graph, violations);
     await _checkSourceRules(violations);
     return violations;
   }
@@ -284,6 +297,24 @@ final class ArchitectureChecker {
     }
   }
 
+  void _checkPureCapabilityCores(
+    Map<String, _Package> graph,
+    List<String> violations,
+  ) {
+    for (final core in policy.pureCapabilityCores) {
+      if (!graph.containsKey(core)) {
+        continue;
+      }
+      final forbidden = _runtimeClosure(
+        core,
+        graph,
+      ).where(_isForbiddenCapabilityCoreDependency).toList()..sort();
+      if (forbidden.isNotEmpty) {
+        violations.add('$core pulls platform dependencies: $forbidden');
+      }
+    }
+  }
+
   Future<void> _checkSourceRules(List<String> violations) async {
     final rules = <({RegExp pattern, String reason})>[
       (
@@ -319,6 +350,29 @@ final class ArchitectureChecker {
       }
     }
     await _checkPresentationHasNoGateway(violations);
+    await _checkPureCoreImports(violations);
+  }
+
+  Future<void> _checkPureCoreImports(List<String> violations) async {
+    final forbiddenImport = RegExp(
+      "(?:import|export)\\s+['\\\"](?:dart:io|package:(?:firebase[^/]*|flutter|go_router|web_socket_channel|socket_io_client)/)",
+    );
+    for (final core in policy.pureCapabilityCores) {
+      final directory = _directory('packages/$core/lib');
+      if (!directory.existsSync()) {
+        continue;
+      }
+      await for (final entity in directory.list(recursive: true)) {
+        if (entity is! File || !entity.path.endsWith('.dart')) {
+          continue;
+        }
+        if (forbiddenImport.hasMatch(await entity.readAsString())) {
+          violations.add(
+            '${entity.path}: pure capability core imports a platform dependency',
+          );
+        }
+      }
+    }
   }
 
   Future<void> _checkPresentationHasNoGateway(List<String> violations) async {
@@ -373,6 +427,17 @@ bool _isForbiddenDependency(String name) {
       normalized.contains('realtime') ||
       normalized.contains('socket_io') ||
       normalized.contains('web_socket');
+}
+
+bool _isForbiddenCapabilityCoreDependency(String name) {
+  final normalized = name.toLowerCase();
+  return normalized == 'flutter' ||
+      normalized == 'go_router' ||
+      normalized == 'web_socket_channel' ||
+      normalized == 'socket_io_client' ||
+      normalized.startsWith('firebase_') ||
+      normalized == 'notifications_fcm' ||
+      normalized == 'realtime_websocket';
 }
 
 Set<String> _runtimeDependencies(String pubspecSource) {

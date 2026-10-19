@@ -64,6 +64,38 @@ void main() {
         contains(contains('presentation references a gateway')),
       );
     });
+
+    test(
+      'rejects platform dependencies and imports in capability cores',
+      () async {
+        final violations = await _checkFixture(
+          'capability_core_platform_leak',
+          const ArchitecturePolicy(
+            workspaceMembers: {'realtime_core'},
+            allowedLocalDependencies: {'realtime_core': <String>{}},
+            minimalApp: 'realtime_core',
+            sourceRoots: [],
+            presentationRoots: [],
+            pureCapabilityCores: {'realtime_core'},
+          ),
+        );
+
+        expect(
+          violations,
+          contains(
+            contains(
+              'realtime_core pulls platform dependencies: [firebase_core]',
+            ),
+          ),
+        );
+        expect(
+          violations,
+          contains(
+            contains('pure capability core imports a platform dependency'),
+          ),
+        );
+      },
+    );
   });
 }
 

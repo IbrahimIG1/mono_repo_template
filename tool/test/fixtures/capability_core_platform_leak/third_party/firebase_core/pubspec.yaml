@@ -1,0 +1,4 @@
+name: firebase_core
+version: 1.0.0
+environment:
+  sdk: ">=3.12.1 <3.13.0"

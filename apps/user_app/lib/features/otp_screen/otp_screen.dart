@@ -98,9 +98,7 @@ class OtpScreen extends StatelessWidget {
                             textStyle: AppTextStyles().fontGold20Bold,
                             keyboardType: TextInputType.number,
                             onChanged: (value) {
-                              print(value);
                               otpCubit.otpController.text = value;
-                              print(otpCubit.otpController.text);
                             },
                             pinTheme: PinTheme(
                               errorBorderColor: AppColors().red,

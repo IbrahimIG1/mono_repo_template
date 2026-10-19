@@ -2,7 +2,7 @@
 
 Status: Active. ADR-008 makes V2 mobile-first; Web and Windows validation is
 paused. Complete, verify, integrate, and checkpoint one goal before starting the
-next. Do not start Goal 5 until Goal 4.5 is closed.
+next. Goals 1 through 5 are closed; Goal 6 is the next implementation goal.
 
 Every goal follows the Git lifecycle in `AGENTS.md`. Existing mobile tests and
 quality gates remain mandatory even when a capability is not part of that goal.
@@ -21,7 +21,7 @@ resolution works, second route generation is clean, Android and iOS builds pass,
 and the runner decision is evidence-backed. Paused targets are not exit gates.
 Checkpoint: Goal 2 commit/tag plus a provenance tag on the probe commit.
 
-## Goal 3 — Foundation and first app (complete, closure evidence pending)
+## Goal 3 — Foundation and first app (complete)
 
 Deliver `platform_foundation`, `networking`, `storage`, `design_system`, the app
 composition root, and automated architecture boundaries.
@@ -38,7 +38,7 @@ Exit criteria:
 - no Firebase, realtime, chat, socket, or legacy dependency enters the minimal
   dependency proof.
 
-## Goal 4 — Authentication and typed routing (complete, closure evidence pending)
+## Goal 4 — Authentication and typed routing (complete)
 
 Deliver pure-Dart auth/session contracts, typed sign-in, serialized refresh,
 request replay policy, app-owned persistence adapter, generated routes, auth
@@ -46,7 +46,7 @@ redirects, and mobile deep-link policy. Exit requires the concurrency, stale
 generation, sign-out, storage-error, destination-policy, route-generation,
 architecture, Android, and iOS gates recorded in the Goal 4/4.5 evidence.
 
-## Goal 4.5 — Verification closure (active)
+## Goal 4.5 — Verification closure (complete)
 
 Close destination-policy and restore error cases, secret-safe credential
 diagnostics, offline architecture checks with negative fixtures, honest root
@@ -54,7 +54,7 @@ gates, legacy secret logging, the tracked temporary dependency tree, minimal-app
 scope, checkpoints, clean-clone instructions, and an evidence-based Goals 1–4
 verification report. No Goal 5 implementation belongs here.
 
-## Goal 5 — Notifications, notification routing, and realtime contracts
+## Goal 5 — Notifications, notification routing, and realtime contracts (complete)
 
 Deliver `notifications_core`, the optional mobile FCM adapter, app-owned
 destination mapping/coordinator, `realtime_core`, one selected transport adapter,
