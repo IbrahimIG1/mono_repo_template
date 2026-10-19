@@ -8,7 +8,7 @@ This repository is migrating from a legacy Flutter template to a modular interna
 - Goals 3 and 4 are complete and add the foundation, `auth_core`, optional `auth_ui`, typed
   routing, and a new `minimal_app` that proves the complete auth/replay flow.
 - `core`, `shared`, `user_app`, and `admin_app` remain outside the V2 workspace as compatibility code. They are not examples of the target architecture.
-- Goal 5 implementation is complete and under final integration. It adds opt-in
+- Goal 5 is complete. It adds opt-in
   notification and realtime contracts, the mobile FCM adapter, and one mobile
   WebSocket transport. Chat remains V2.1.
 

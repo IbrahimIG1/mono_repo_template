@@ -1,7 +1,7 @@
 # V2 Goal 5: Notifications and Realtime
 
-Status: implementation and local verification complete; branch CI and main
-integration evidence are recorded below.
+Status: complete on the Goal 5 branch; main integration and checkpoint evidence
+are recorded below.
 
 ## Delivered boundary
 
@@ -50,7 +50,8 @@ matrix.
 
 ## Automated evidence
 
-Evidence collected on Windows on 2026-10-19 against commit `560f427`:
+Evidence collected on Windows on 2026-10-19 against commit `cfdd451` (the source
+candidate) and final CI commit `d803ceb`:
 
 | Gate | Command | Result |
 |---|---|---|
@@ -86,9 +87,11 @@ isolated and regression-tested before this final verification.
 ## CI and platform evidence
 
 - Branch Android/quality workflow:
-  [run 39278009283](https://github.com/IbrahimIG1/mono_repo_template/actions/runs/39278009283).
+  [run 39294681677](https://github.com/IbrahimIG1/mono_repo_template/actions/runs/39294681677)
+  — PASS on `d803ceb`.
 - Branch iOS no-codesign workflow:
-  [run 39278009313](https://github.com/IbrahimIG1/mono_repo_template/actions/runs/39278009313).
+  [run 39294681735](https://github.com/IbrahimIG1/mono_repo_template/actions/runs/39294681735)
+  — PASS on `d803ceb` using Xcode 26.
 
 These compile and contract-test mobile integrations; they are not physical
 device proof. The main-branch merge runs and checkpoint tag are appended during
