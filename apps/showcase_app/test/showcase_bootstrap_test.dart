@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
 import 'package:platform_foundation/platform_foundation.dart';
 import 'package:showcase_app/showcase_app.dart';
 
@@ -20,6 +21,11 @@ void main() {
 
     expect(find.text('Showcase'), findsOneWidget);
     expect(find.text('Bootstrap ready for production.'), findsOneWidget);
+  });
+
+  test('brand composition keeps product colors in the app', () {
+    expect(ShowcaseTheme.brandSeed, const Color(0xFFB4953D));
+    expect(ShowcaseTheme.light().useMaterial3, isTrue);
   });
 }
 

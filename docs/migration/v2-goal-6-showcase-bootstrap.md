@@ -1,6 +1,6 @@
 # V2 Goal 6 — Showcase bootstrap/configuration slice
 
-Status: in progress (slice 1 of 9)
+Status: complete for slices 1–2; localization is next
 
 ## Scope
 
@@ -30,6 +30,8 @@ available until the relevant parity tests pass in a later slice.
 - `showcase_app` owns `ShowcaseConfig` and the composition root.
 - `platform_foundation` supplies the injected logger contract.
 - `design_system` supplies the neutral theme.
+- `showcase_app` supplies the product seed color through `ShowcaseTheme`; the
+  shared package does not absorb legacy singleton branding state.
 - API endpoints, Firebase files, localization content, routes, and product
   assets remain app-owned and are intentionally absent from this bootstrap.
 
@@ -43,4 +45,3 @@ available until the relevant parity tests pass in a later slice.
 - `minimal_app` remains unchanged and its existing gates continue to pass.
 - Android and iOS platform folders are generated for the new app; Web and
   Windows remain paused and are not added to validation.
-

@@ -1,8 +1,8 @@
-import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_foundation/platform_foundation.dart';
 
 import 'showcase_config.dart';
+import 'showcase_theme.dart';
 
 final class ShowcaseApp extends StatelessWidget {
   const ShowcaseApp({required this.config, required this.logger, super.key});
@@ -14,7 +14,7 @@ final class ShowcaseApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
     title: config.appTitle,
-    theme: PlatformTheme.light(seedColor: Colors.indigo),
+    theme: ShowcaseTheme.light(),
     home: _BootstrapScreen(config: config),
   );
 }
