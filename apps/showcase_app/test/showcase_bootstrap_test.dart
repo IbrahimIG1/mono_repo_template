@@ -47,7 +47,7 @@ void main() {
       );
       await tester.tap(find.text('Account'));
       await tester.pumpAndSettle();
-    expect(find.text('Sign in'), findsNWidgets(2));
+      expect(find.text('Sign in'), findsNWidgets(2));
 
       final fields = find.byType(TextFormField);
       await tester.enterText(fields.at(0), 'driver@example.com');
