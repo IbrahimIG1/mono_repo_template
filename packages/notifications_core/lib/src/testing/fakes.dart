@@ -62,10 +62,23 @@ final class FakePushNotificationClient implements PushNotificationClient {
   @override
   Future<Result<PushToken?>> getToken() async => Success(token);
 
-  void addToken(PushToken value) => _tokens.add(value);
-  void addMessage(PushMessage value) => _messages.add(value);
-  void addInteraction(NotificationInteraction value) =>
+  void addToken(PushToken value) {
+    if (!isDisposed) {
+      _tokens.add(value);
+    }
+  }
+
+  void addMessage(PushMessage value) {
+    if (!isDisposed) {
+      _messages.add(value);
+    }
+  }
+
+  void addInteraction(NotificationInteraction value) {
+    if (!isDisposed) {
       _interactions.add(value);
+    }
+  }
 
   @override
   Future<void> dispose() async {

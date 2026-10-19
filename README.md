@@ -8,8 +8,8 @@ This repository is migrating from a legacy Flutter template to a modular interna
 - Goals 3 and 4 add the foundation, `auth_core`, optional `auth_ui`, typed
   routing, and a new `minimal_app` that proves the complete auth/replay flow.
 - `core`, `shared`, `user_app`, and `admin_app` remain outside the V2 workspace as compatibility code. They are not examples of the target architecture.
-- Notifications and realtime are later V2 goals. Chat remains V2.1 and is not
-  part of the V2 foundation/auth release.
+- Goal 5 adds opt-in notification and realtime contracts, the mobile FCM
+  adapter, and one mobile WebSocket transport. Chat remains V2.1.
 
 ## Workspace
 
@@ -23,6 +23,10 @@ packages/
   design_system/        # Brand-neutral theme tokens and primitives
   auth_core/            # Pure-Dart auth/session contracts and orchestration
   auth_ui/              # Optional Cubit and form primitives
+  notifications_core/  # Pure-Dart payload, client, and deduplication contracts
+  notifications_fcm/   # Optional Android/iOS Firebase Messaging adapter
+  realtime_core/       # Pure-Dart realtime lifecycle and buffering contracts
+  realtime_websocket/  # Optional Android/iOS dart:io WebSocket transport
 core/                   # Legacy compatibility package; not admitted
 shared/                 # Legacy compatibility package; not admitted
 ```
@@ -51,6 +55,7 @@ dart analyze --fatal-warnings --fatal-infos
 dart test tool/test
 dart run tool/check_architecture.dart
 dart run tool/verify_temporary_consumer.dart
+dart run tool/verify_optional_capabilities.dart --android
 ```
 
 The root formatting gate is `dart run tool/workspace.dart format`. It derives
@@ -69,6 +74,8 @@ Platform build gates are documented in [Goal 3 evidence](docs/migration/v2-goal-
 
 Goal 4 behavior and test evidence are documented in the
 [auth/routing migration record](docs/migration/v2-goal-4-auth-routing.md).
+Mobile push setup is documented in the
+[notifications guide](docs/guides/mobile-notifications.md).
 
 ## Create another V2 app
 
@@ -89,5 +96,6 @@ executable tests, architecture checks, and applicable platform builds pass.
 - [Auth and typed routing implementation](docs/architecture/adr-007-auth-and-routing.md)
 - [Mobile-first V2 scope](docs/architecture/adr-008-mobile-first-scope.md)
 - [`minimal_app` scope decision](docs/architecture/adr-009-minimal-reference-scope.md)
+- [Notifications and realtime boundaries](docs/architecture/adr-010-notifications-and-realtime.md)
 - [Execution workflow](docs/migration/v2-execution-workflow.md)
 - [Repository working rules](AGENTS.md)

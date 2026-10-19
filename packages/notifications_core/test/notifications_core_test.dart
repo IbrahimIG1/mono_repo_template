@@ -6,6 +6,12 @@ import 'package:platform_foundation/platform_foundation.dart';
 import 'package:test/test.dart';
 
 void main() {
+  test('fake passes the shared notification client contract', () async {
+    await verifyNotificationClientContract(
+      () async => _FakeNotificationContractDriver(),
+    );
+  });
+
   group('NotificationPayloadDecoder', () {
     const decoder = NotificationPayloadDecoder();
 
@@ -132,4 +138,18 @@ void main() {
       isNot(contains('secret')),
     );
   });
+}
+
+final class _FakeNotificationContractDriver
+    implements NotificationContractDriver {
+  final FakePushNotificationClient _client = FakePushNotificationClient()
+    ..token = const PushToken('contract-token');
+
+  @override
+  PushNotificationClient get client => _client;
+
+  @override
+  Future<void> injectInteraction(NotificationInteraction interaction) async {
+    _client.addInteraction(interaction);
+  }
 }

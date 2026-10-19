@@ -1,0 +1,6 @@
+name: realtime_core
+environment:
+  sdk: ">=3.12.1 <3.13.0"
+resolution: workspace
+dependencies:
+  firebase_core: any

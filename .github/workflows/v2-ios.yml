@@ -2,7 +2,7 @@ name: V2 iOS
 
 on:
   push:
-    branches: [main, "v2/**"]
+    branches: [main, "v2/**", "goal-*"]
     paths:
       - "packages/**"
       - "apps/minimal_app/lib/**"
@@ -38,7 +38,7 @@ jobs:
   build-ios:
     name: Build iOS (no codesign)
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -49,3 +49,4 @@ jobs:
       - run: flutter pub get --enforce-lockfile
       - run: flutter build ios --release --no-codesign --no-pub
         working-directory: apps/minimal_app
+      - run: dart run tool/verify_optional_capabilities.dart --ios

@@ -1,10 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:notifications_core/notifications_core.dart';
+import 'package:notifications_core/testing.dart';
 import 'package:notifications_fcm/notifications_fcm.dart';
 import 'package:notifications_fcm/testing.dart';
 import 'package:platform_foundation/platform_foundation.dart';
 
 void main() {
+  test('FCM adapter passes the shared notification client contract', () async {
+    final driver = _FcmNotificationContractDriver();
+    await verifyNotificationClientContract(() async => driver);
+    await driver.port.dispose();
+  });
+
   test('initialization is idempotent and maps opened messages', () async {
     final port = FakeFcmPort()
       ..initialMessage = const FcmMessage(
@@ -15,14 +22,16 @@ void main() {
       port: port,
       isMobilePlatform: true,
     );
+    expect(await client.initialize(), isA<Success<NotificationCapability>>());
+    expect(await client.initialize(), isA<Success<NotificationCapability>>());
     final interactions = <NotificationInteraction>[];
     final subscription = client.interactions.listen(interactions.add);
-
-    expect(await client.initialize(), isA<Success<NotificationCapability>>());
-    expect(await client.initialize(), isA<Success<NotificationCapability>>());
+    port.openedController.add(
+      const FcmMessage(id: 'message-2', data: {'interaction_id': 'tap-2'}),
+    );
     await Future<void>.delayed(Duration.zero);
 
-    expect(interactions.single.id, 'tap-1');
+    expect(interactions.map((value) => value.id), ['tap-1', 'tap-2']);
     await subscription.cancel();
     await client.dispose();
     await port.dispose();
@@ -90,4 +99,27 @@ void main() {
     await subscription.cancel();
     await port.dispose();
   });
+}
+
+final class _FcmNotificationContractDriver
+    implements NotificationContractDriver {
+  _FcmNotificationContractDriver() : port = FakeFcmPort() {
+    port.token = 'contract-token';
+    _client = FcmPushNotificationClient(port: port, isMobilePlatform: true);
+  }
+
+  final FakeFcmPort port;
+  late final FcmPushNotificationClient _client;
+
+  @override
+  PushNotificationClient get client => _client;
+
+  @override
+  Future<void> injectInteraction(NotificationInteraction interaction) async {
+    if (!port.openedController.isClosed) {
+      port.openedController.add(
+        FcmMessage(id: interaction.id, data: interaction.data),
+      );
+    }
+  }
 }

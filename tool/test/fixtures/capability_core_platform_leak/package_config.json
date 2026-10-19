@@ -1,0 +1,23 @@
+{
+  "configVersion": 2,
+  "packages": [
+    {
+      "name": "fixture_workspace",
+      "rootUri": "./",
+      "packageUri": "lib/",
+      "languageVersion": "3.12"
+    },
+    {
+      "name": "realtime_core",
+      "rootUri": "packages/realtime_core/",
+      "packageUri": "lib/",
+      "languageVersion": "3.12"
+    },
+    {
+      "name": "firebase_core",
+      "rootUri": "third_party/firebase_core/",
+      "packageUri": "lib/",
+      "languageVersion": "3.12"
+    }
+  ]
+}

@@ -16,7 +16,11 @@ final class FcmPushNotificationClient implements PushNotificationClient {
     isMobilePlatform ?? (Platform.isAndroid || Platform.isIOS),
   );
 
-  FcmPushNotificationClient._(this._port, this._isMobilePlatform);
+  FcmPushNotificationClient._(this._port, this._isMobilePlatform) {
+    _interactions = StreamController.broadcast(
+      onListen: _flushPendingInteractions,
+    );
+  }
 
   factory FcmPushNotificationClient.create() =>
       FcmPushNotificationClient(port: FirebaseMessagingPort.create());
@@ -25,9 +29,9 @@ final class FcmPushNotificationClient implements PushNotificationClient {
   final bool _isMobilePlatform;
   final StreamController<PushToken> _tokens = StreamController.broadcast();
   final StreamController<PushMessage> _messages = StreamController.broadcast();
-  final StreamController<NotificationInteraction> _interactions =
-      StreamController.broadcast();
+  late final StreamController<NotificationInteraction> _interactions;
   final List<StreamSubscription<Object?>> _subscriptions = [];
+  final List<NotificationInteraction> _pendingInteractions = [];
   var _initialized = false;
   var _disposed = false;
 
@@ -143,13 +147,31 @@ final class FcmPushNotificationClient implements PushNotificationClient {
   void _onInteraction(FcmMessage message) {
     if (!_disposed) {
       final id = message.data['interaction_id'] ?? _messageId(message);
-      _interactions.add(
-        NotificationInteraction(
-          id: id,
-          data: Map.unmodifiable(message.data),
-          occurredAt: DateTime.now().toUtc(),
-        ),
+      final interaction = NotificationInteraction(
+        id: id,
+        data: Map.unmodifiable(message.data),
+        occurredAt: DateTime.now().toUtc(),
       );
+      if (_interactions.hasListener) {
+        _flushPendingInteractions();
+        _interactions.add(interaction);
+      } else {
+        if (_pendingInteractions.length == 16) {
+          _pendingInteractions.removeAt(0);
+        }
+        _pendingInteractions.add(interaction);
+      }
+    }
+  }
+
+  void _flushPendingInteractions() {
+    if (!_interactions.hasListener || _pendingInteractions.isEmpty) {
+      return;
+    }
+    final pending = List.of(_pendingInteractions);
+    _pendingInteractions.clear();
+    for (final interaction in pending) {
+      _interactions.add(interaction);
     }
   }
 
@@ -182,6 +204,7 @@ final class FcmPushNotificationClient implements PushNotificationClient {
       return;
     }
     _disposed = true;
+    _pendingInteractions.clear();
     for (final subscription in _subscriptions) {
       await subscription.cancel();
     }
