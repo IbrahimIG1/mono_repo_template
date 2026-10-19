@@ -2,6 +2,22 @@ import 'dart:convert';
 import 'dart:io';
 
 Future<void> main(List<String> arguments) async {
+  try {
+    await _runVerification(arguments);
+  } on Object catch (error, stackTrace) {
+    stderr.writeln('Optional capability rehearsal failed: $error');
+    stderr.writeln(stackTrace);
+    if (Platform.environment['GITHUB_ACTIONS'] == 'true') {
+      stdout.writeln(
+        '::error title=Optional capability rehearsal failed::'
+        '${_githubCommandValue('$error')}',
+      );
+    }
+    exitCode = 1;
+  }
+}
+
+Future<void> _runVerification(List<String> arguments) async {
   final platform = arguments.contains('--ios') ? 'ios' : 'android';
   if (platform == 'ios' && !Platform.isMacOS) {
     throw UnsupportedError('The iOS rehearsal requires a macOS host.');
@@ -62,6 +78,11 @@ Future<void> main(List<String> arguments) async {
     }
   }
 }
+
+String _githubCommandValue(String value) => value
+    .replaceAll('%', '%25')
+    .replaceAll('\r', '%0D')
+    .replaceAll('\n', '%0A');
 
 Future<void> configureIosMinimumVersionForRehearsal(Directory app) async {
   const minimumVersion = '15.0';
