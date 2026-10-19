@@ -1,43 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:platform_foundation/platform_foundation.dart';
 
+import '../localization/showcase_localizations.dart';
+import '../routing/showcase_router.dart';
 import 'showcase_config.dart';
 import 'showcase_theme.dart';
-import '../localization/showcase_localizations.dart';
 
-final class ShowcaseApp extends StatelessWidget {
+final class ShowcaseApp extends StatefulWidget {
   const ShowcaseApp({required this.config, required this.logger, super.key});
 
   final ShowcaseConfig config;
   final AppLogger logger;
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
+  State<ShowcaseApp> createState() => _ShowcaseAppState();
+}
+
+final class _ShowcaseAppState extends State<ShowcaseApp> {
+  late final ShowcaseRouter _showcaseRouter;
+
+  @override
+  void initState() {
+    super.initState();
+    _showcaseRouter = ShowcaseRouter();
+  }
+
+  @override
+  void dispose() {
+    _showcaseRouter.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => MaterialApp.router(
     debugShowCheckedModeBanner: false,
-    onGenerateTitle: (context) =>
-        ShowcaseLocalizations.of(context).appTitle(config.environment.name),
+    onGenerateTitle: (context) => ShowcaseLocalizations.of(
+      context,
+    ).appTitle(widget.config.environment.name),
     localizationsDelegates: const [ShowcaseLocalizations.delegate],
     supportedLocales: ShowcaseLocalizations.supportedLocales,
     theme: ShowcaseTheme.light(),
-    home: _BootstrapScreen(config: config),
-  );
-}
-
-final class _BootstrapScreen extends StatelessWidget {
-  const _BootstrapScreen({required this.config});
-
-  final ShowcaseConfig config;
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(config.appTitle)),
-    body: Center(
-      child: Text(
-        ShowcaseLocalizations.of(
-          context,
-        ).bootstrapReady(config.environment.name),
-        textAlign: TextAlign.center,
-      ),
-    ),
+    routerConfig: _showcaseRouter.router,
   );
 }

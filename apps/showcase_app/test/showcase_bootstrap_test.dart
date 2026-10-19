@@ -20,7 +20,10 @@ void main() {
     );
 
     expect(find.text('Showcase'), findsOneWidget);
-    expect(find.text('Bootstrap ready for production.'), findsOneWidget);
+    expect(find.text('About'), findsOneWidget);
+    await tester.tap(find.text('About'));
+    await tester.pumpAndSettle();
+    expect(find.text('Showcase navigation shell'), findsOneWidget);
   });
 
   test('brand composition keeps product colors in the app', () {

@@ -1,6 +1,6 @@
 # V2 Goal 6 — Showcase bootstrap/configuration slice
 
-Status: complete for slices 1–3; routing is next
+Status: complete for slices 1–4; login/session is next
 
 ## Scope
 
@@ -34,6 +34,8 @@ available until the relevant parity tests pass in a later slice.
   shared package does not absorb legacy singleton branding state.
 - Localization is app-owned through a typed delegate with an explicit English
   support boundary; legacy generated localization remains untouched.
+- Routing is app-owned through `go_router_builder`; the generated route file is
+  reproducible on a second run and no legacy named-route consumer was changed.
 - API endpoints, Firebase files, localization content, routes, and product
   assets remain app-owned and are intentionally absent from this bootstrap.
 
