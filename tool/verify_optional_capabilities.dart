@@ -59,6 +59,11 @@ Future<void> _runVerification(List<String> arguments) async {
     await _run('flutter', const ['analyze'], appDirectory.path);
     await _build(appDirectory, platform);
 
+    // The iOS Swift Package Manager checkout can contain Dart test fixtures.
+    // Remove all products from the opt-in build before analyzing the opt-out
+    // state so Flutter analyzes only the consumer workspace, not vendored
+    // sources under build/ios/SourcePackages.
+    await clearOptionalCapabilityBuildArtifacts(appDirectory);
     await _writeAppPubspec(appDirectory, includeOptionalCapabilities: false);
     await _writeMain(appDirectory, includeOptionalCapabilities: false);
     await _run('flutter', const ['pub', 'get'], temporaryRoot.path);
@@ -76,6 +81,13 @@ Future<void> _runVerification(List<String> arguments) async {
     if (temporaryRoot.existsSync()) {
       await temporaryRoot.delete(recursive: true);
     }
+  }
+}
+
+Future<void> clearOptionalCapabilityBuildArtifacts(Directory app) async {
+  final buildDirectory = Directory('${app.path}${Platform.pathSeparator}build');
+  if (buildDirectory.existsSync()) {
+    await buildDirectory.delete(recursive: true);
   }
 }
 

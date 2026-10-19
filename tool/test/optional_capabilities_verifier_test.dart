@@ -5,6 +5,38 @@ import 'package:test/test.dart';
 import '../verify_optional_capabilities.dart';
 
 void main() {
+  test('opt-out rehearsal removes opt-in build products only', () async {
+    final root = await Directory.systemTemp.createTemp(
+      'capability-clean-test-',
+    );
+    try {
+      final vendoredFixture = File(
+        '${root.path}${Platform.pathSeparator}build${Platform.pathSeparator}'
+        'ios${Platform.pathSeparator}SourcePackages${Platform.pathSeparator}'
+        'firebase_messaging${Platform.pathSeparator}test${Platform.pathSeparator}'
+        'mock.dart',
+      );
+      final appSource = File(
+        '${root.path}${Platform.pathSeparator}lib${Platform.pathSeparator}'
+        'main.dart',
+      );
+      await vendoredFixture.parent.create(recursive: true);
+      await vendoredFixture.writeAsString('generated dependency fixture');
+      await appSource.parent.create(recursive: true);
+      await appSource.writeAsString('void main() {}');
+
+      await clearOptionalCapabilityBuildArtifacts(root);
+
+      expect(
+        Directory('${root.path}${Platform.pathSeparator}build').existsSync(),
+        isFalse,
+      );
+      expect(appSource.existsSync(), isTrue);
+    } finally {
+      await root.delete(recursive: true);
+    }
+  });
+
   test('iOS rehearsal raises every app deployment target to 15.0', () async {
     final root = await Directory.systemTemp.createTemp('ios-target-test-');
     try {

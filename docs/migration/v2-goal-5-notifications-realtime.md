@@ -103,9 +103,12 @@ integration so the record points at the exact authoritative commit.
   build artifacts. Package-scoped workspace commands were then used; no gate or
   source test was removed.
 - The optional-capability rehearsal initially exposed iOS deployment-target and
-  diagnostic gaps. The tool now raises generated Xcode targets to iOS 15 and
-  preserves failing command output. Its deployment-target behavior has a unit
-  test.
+  diagnostic gaps. A later iOS run also showed that `flutter analyze` after the
+  opt-in build scanned Dart fixtures inside Swift Package Manager's generated
+  `build/ios/SourcePackages` checkout. The rehearsal now removes only the
+  generated `build/` tree before proving the opt-out state. Both cleanup and
+  deployment-target behavior have unit tests, and failing command output is
+  preserved.
 - Physical-device push receipt, notification taps from foreground/background/
   terminated states, APNs provisioning, and OS deep-link launch behavior were
   not run because this environment has no provisioned Android/iOS devices or
