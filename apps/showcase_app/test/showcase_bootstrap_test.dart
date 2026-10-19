@@ -14,9 +14,12 @@ void main() {
 
   testWidgets('bootstrap renders the selected environment', (tester) async {
     const config = ShowcaseConfig(environment: ShowcaseEnvironment.production);
+    final auth = ShowcaseAuthComposition.create();
+    await auth.restore();
+    addTearDown(auth.dispose);
 
     await tester.pumpWidget(
-      ShowcaseApp(config: config, logger: const _RecordingLogger()),
+      ShowcaseApp(config: config, logger: const _RecordingLogger(), auth: auth),
     );
 
     expect(find.text('Showcase'), findsOneWidget);
@@ -25,6 +28,35 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Showcase navigation shell'), findsOneWidget);
   });
+
+  testWidgets(
+    'protected account redirects to sign-in and restores after login',
+    (tester) async {
+      final auth = ShowcaseAuthComposition.create();
+      await auth.restore();
+      addTearDown(auth.dispose);
+
+      await tester.pumpWidget(
+        ShowcaseApp(
+          config: const ShowcaseConfig(
+            environment: ShowcaseEnvironment.development,
+          ),
+          logger: const _RecordingLogger(),
+          auth: auth,
+        ),
+      );
+      await tester.tap(find.text('Account'));
+      await tester.pumpAndSettle();
+    expect(find.text('Sign in'), findsNWidgets(2));
+
+      final fields = find.byType(TextFormField);
+      await tester.enterText(fields.at(0), 'driver@example.com');
+      await tester.enterText(fields.at(1), 'password123');
+      await tester.tap(find.widgetWithText(FilledButton, 'Sign in'));
+      await tester.pumpAndSettle();
+      expect(find.text('Sign out'), findsOneWidget);
+    },
+  );
 
   test('brand composition keeps product colors in the app', () {
     expect(ShowcaseTheme.brandSeed, const Color(0xFFB4953D));

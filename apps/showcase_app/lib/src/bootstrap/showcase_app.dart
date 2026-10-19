@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:platform_foundation/platform_foundation.dart';
 
+import '../auth/showcase_auth.dart';
 import '../localization/showcase_localizations.dart';
 import '../routing/showcase_router.dart';
 import 'showcase_config.dart';
 import 'showcase_theme.dart';
 
 final class ShowcaseApp extends StatefulWidget {
-  const ShowcaseApp({required this.config, required this.logger, super.key});
+  const ShowcaseApp({
+    required this.config,
+    required this.logger,
+    required this.auth,
+    super.key,
+  });
 
   final ShowcaseConfig config;
   final AppLogger logger;
+  final ShowcaseAuthComposition auth;
 
   @override
   State<ShowcaseApp> createState() => _ShowcaseAppState();
@@ -22,7 +29,9 @@ final class _ShowcaseAppState extends State<ShowcaseApp> {
   @override
   void initState() {
     super.initState();
-    _showcaseRouter = ShowcaseRouter();
+    _showcaseRouter = ShowcaseRouter(
+      sessionManager: widget.auth.sessionManager,
+    );
   }
 
   @override
@@ -32,14 +41,17 @@ final class _ShowcaseAppState extends State<ShowcaseApp> {
   }
 
   @override
-  Widget build(BuildContext context) => MaterialApp.router(
-    debugShowCheckedModeBanner: false,
-    onGenerateTitle: (context) => ShowcaseLocalizations.of(
-      context,
-    ).appTitle(widget.config.environment.name),
-    localizationsDelegates: const [ShowcaseLocalizations.delegate],
-    supportedLocales: ShowcaseLocalizations.supportedLocales,
-    theme: ShowcaseTheme.light(),
-    routerConfig: _showcaseRouter.router,
+  Widget build(BuildContext context) => ShowcaseAuthScope(
+    auth: widget.auth,
+    child: MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      onGenerateTitle: (context) => ShowcaseLocalizations.of(
+        context,
+      ).appTitle(widget.config.environment.name),
+      localizationsDelegates: const [ShowcaseLocalizations.delegate],
+      supportedLocales: ShowcaseLocalizations.supportedLocales,
+      theme: ShowcaseTheme.light(),
+      routerConfig: _showcaseRouter.router,
+    ),
   );
 }

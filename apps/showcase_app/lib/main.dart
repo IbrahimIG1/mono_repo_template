@@ -6,5 +6,7 @@ import 'showcase_app.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final config = ShowcaseConfig.fromEnvironment();
-  runApp(ShowcaseApp(config: config, logger: const NullLogger()));
+  final auth = ShowcaseAuthComposition.create();
+  await auth.restore();
+  runApp(ShowcaseApp(config: config, logger: const NullLogger(), auth: auth));
 }

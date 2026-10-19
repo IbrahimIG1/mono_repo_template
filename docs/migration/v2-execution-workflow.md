@@ -82,8 +82,8 @@ legacy paths and compatibility exports until behavior, storage, routes, assets,
 and mobile builds reach documented parity. Do not convert `user_app` or
 `admin_app` in place.
 
-Completed slices: bootstrap/configuration, design system, localization, and the
-routing/navigation shell.
+Completed slices: bootstrap/configuration, design system, localization,
+routing/navigation shell, and login/session.
 `apps/showcase_app`
 is a new Android/iOS reference app using only `platform_foundation` and
 `design_system`; its typed environment config, app-owned brand composition, and

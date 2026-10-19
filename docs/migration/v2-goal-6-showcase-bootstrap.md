@@ -1,6 +1,6 @@
 # V2 Goal 6 — Showcase bootstrap/configuration slice
 
-Status: complete for slices 1–4; login/session is next
+Status: complete for slices 1–5; register/OTP/reset is next
 
 ## Scope
 
@@ -36,6 +36,10 @@ available until the relevant parity tests pass in a later slice.
   support boundary; legacy generated localization remains untouched.
 - Routing is app-owned through `go_router_builder`; the generated route file is
   reproducible on a second run and no legacy named-route consumer was changed.
+- Login/session uses `auth_core` and `auth_ui` through an app-owned composition
+  root and in-memory fake gateway. Protected account navigation redirects to
+  sign-in and returns after a successful credential submission; no production
+  backend or credentials are included.
 - API endpoints, Firebase files, localization content, routes, and product
   assets remain app-owned and are intentionally absent from this bootstrap.
 
