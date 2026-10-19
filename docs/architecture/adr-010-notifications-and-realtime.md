@@ -37,11 +37,14 @@ inbox; it must not silently turn navigation into an unbounded retry loop.
 The FCM background entry point is top-level and constructs only its own payload
 decoder. It never assumes foreground DI or navigation. Apps requiring background
 persistence provide an app-owned top-level handler with isolate-safe dependencies.
+Foreground adapter initialization is serialized: concurrent callers share one
+initial-message lookup and one set of Firebase stream subscriptions.
 
 ## Realtime lifecycle policy
 
-- Concurrent `connect()` calls share one attempt; a connected call is idempotent
-  for the same endpoint.
+- Concurrent `connect()` calls share one attempt; calls made while automatic
+  reconnect is delayed or opening join that reconnect instead of opening a
+  parallel transport. A connected call is idempotent for the same endpoint.
 - `emit()` before connection fails and is not queued implicitly.
 - Connect cancellation and timeout abandon the generation; a late socket is
   closed and cannot publish state.

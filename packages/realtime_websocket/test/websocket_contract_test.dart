@@ -100,6 +100,46 @@ void main() {
     expect(client.currentState, RealtimeConnectionState.disconnected);
     await client.dispose();
   });
+
+  test('explicit connect joins an active automatic reconnect', () async {
+    final server = await _LocalRealtimeServer.start();
+    final reconnectDelayStarted = Completer<void>();
+    final releaseReconnect = Completer<void>();
+    final client = _createClient(
+      reconnectPolicy: const WebSocketReconnectPolicy(
+        maximumAttempts: 1,
+        baseDelay: Duration(milliseconds: 1),
+        maximumDelay: Duration(milliseconds: 1),
+        jitterFactor: 0,
+      ),
+      delay: (_) {
+        if (!reconnectDelayStarted.isCompleted) {
+          reconnectDelayStarted.complete();
+        }
+        return releaseReconnect.future;
+      },
+    );
+    final configuration = RealtimeConfiguration(endpoint: server.endpoint);
+
+    try {
+      await client.connect(configuration);
+      await server.waitFor(() => server.connectionCount == 1);
+      await server.dropCurrentConnection();
+      await reconnectDelayStarted.future;
+
+      final joined = client.connect(configuration);
+      await Future<void>.delayed(Duration.zero);
+      expect(client.transportConnectAttempts, 1);
+
+      releaseReconnect.complete();
+      expect(await joined, isA<Success<void>>());
+      await server.waitFor(() => server.connectionCount == 2);
+      expect(client.transportConnectAttempts, 2);
+    } finally {
+      await client.dispose();
+      await server.close();
+    }
+  });
 }
 
 RealtimeWebSocketClient _createClient({
@@ -109,6 +149,7 @@ RealtimeWebSocketClient _createClient({
     maximumDelay: Duration(milliseconds: 2),
     jitterFactor: 0,
   ),
+  ReconnectDelay? delay,
 }) => RealtimeWebSocketClient(
   codec: const _JsonRealtimeCodec(),
   authProvider: const _TestAuthProvider(),
@@ -118,6 +159,7 @@ RealtimeWebSocketClient _createClient({
   heartbeatTimeout: const Duration(milliseconds: 100),
   connectionTimeout: const Duration(milliseconds: 50),
   random: Random(1),
+  delay: delay,
 );
 
 final class _WebSocketDriver implements RealtimeContractDriver {

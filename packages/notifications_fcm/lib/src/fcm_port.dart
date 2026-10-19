@@ -42,7 +42,9 @@ final class FakeFcmPort implements FcmPort {
   FcmAuthorizationStatus permission = FcmAuthorizationStatus.authorized;
   String? token;
   FcmMessage? initialMessage;
+  Future<void>? initialMessageBarrier;
   var permissionRequests = 0;
+  var initialMessageRequests = 0;
 
   @override
   Stream<String> get tokenChanges => tokenController.stream;
@@ -57,7 +59,11 @@ final class FakeFcmPort implements FcmPort {
   Future<String?> getToken() async => token;
 
   @override
-  Future<FcmMessage?> getInitialMessage() async => initialMessage;
+  Future<FcmMessage?> getInitialMessage() async {
+    initialMessageRequests++;
+    await initialMessageBarrier;
+    return initialMessage;
+  }
 
   @override
   Future<FcmAuthorizationStatus> requestPermission() async {

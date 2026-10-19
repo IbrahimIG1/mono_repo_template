@@ -32,6 +32,7 @@ final class FcmPushNotificationClient implements PushNotificationClient {
   late final StreamController<NotificationInteraction> _interactions;
   final List<StreamSubscription<Object?>> _subscriptions = [];
   final List<NotificationInteraction> _pendingInteractions = [];
+  Future<Result<NotificationCapability>>? _initializeOperation;
   var _initialized = false;
   var _disposed = false;
 
@@ -45,20 +46,36 @@ final class FcmPushNotificationClient implements PushNotificationClient {
   Stream<NotificationInteraction> get interactions => _interactions.stream;
 
   @override
-  Future<Result<NotificationCapability>> initialize() async {
+  Future<Result<NotificationCapability>> initialize() {
     if (_disposed) {
-      return _failure(
-        NotificationFailureKind.disposed,
-        'notifications.client_disposed',
-        'Notification client is disposed.',
+      return Future.value(
+        _failure(
+          NotificationFailureKind.disposed,
+          'notifications.client_disposed',
+          'Notification client is disposed.',
+        ),
       );
     }
     if (!_isMobilePlatform) {
-      return const Success(NotificationCapability.unsupported);
+      return Future.value(const Success(NotificationCapability.unsupported));
     }
     if (_initialized) {
-      return const Success(NotificationCapability.supported);
+      return Future.value(const Success(NotificationCapability.supported));
     }
+    final existing = _initializeOperation;
+    if (existing != null) {
+      return existing;
+    }
+    final operation = _performInitialize();
+    _initializeOperation = operation;
+    return operation.whenComplete(() {
+      if (identical(_initializeOperation, operation)) {
+        _initializeOperation = null;
+      }
+    });
+  }
+
+  Future<Result<NotificationCapability>> _performInitialize() async {
     final added = <StreamSubscription<Object?>>[
       _port.tokenChanges.listen(_onToken),
       _port.foregroundMessages.listen(_onForegroundMessage),
@@ -70,14 +87,28 @@ final class FcmPushNotificationClient implements PushNotificationClient {
       if (initial != null) {
         _onInteraction(initial);
       }
+      if (_disposed) {
+        await _cancelSubscriptions(added);
+        return _failure(
+          NotificationFailureKind.disposed,
+          'notifications.client_disposed',
+          'Notification client is disposed.',
+        );
+      }
       _initialized = true;
       return const Success(NotificationCapability.supported);
     } on Object catch (error, stackTrace) {
-      for (final subscription in added) {
-        await subscription.cancel();
-        _subscriptions.remove(subscription);
-      }
+      await _cancelSubscriptions(added);
       return _unavailable('initialize', error, stackTrace);
+    }
+  }
+
+  Future<void> _cancelSubscriptions(
+    Iterable<StreamSubscription<Object?>> subscriptions,
+  ) async {
+    for (final subscription in subscriptions) {
+      await subscription.cancel();
+      _subscriptions.remove(subscription);
     }
   }
 

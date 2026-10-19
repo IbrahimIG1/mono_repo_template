@@ -172,6 +172,48 @@ void main() {
     await client.dispose();
     await sessionManager.dispose();
   });
+
+  test('an unexpected interaction failure does not poison the queue', () async {
+    final client = FakePushNotificationClient();
+    final sessionManager = SessionManager(
+      store: MemorySessionStore(),
+      gateway: FakeSessionGateway(
+        refreshHandler: (_) async => const Failure(
+          AuthFailure(
+            kind: AuthFailureKind.invalidSession,
+            code: 'auth.no_session',
+            message: 'No session.',
+          ),
+        ),
+      ),
+    );
+    await sessionManager.restore();
+    final navigator = _RecordingNavigator();
+    final errors = <Object>[];
+    final coordinator = PendingInteractionCoordinator(
+      client: client,
+      decoder: const NotificationPayloadDecoder(),
+      mapper: _ThrowOnceDestinationMapper(),
+      deduplicator: InteractionDeduplicator(
+        store: MemoryHandledInteractionStore(),
+      ),
+      sessionManager: sessionManager,
+      navigator: navigator,
+      routerReady: Future.value(),
+      onUnexpectedError: (error, _) => errors.add(error),
+    )..start();
+
+    client.addInteraction(_interaction('first', itemId: 'first'));
+    client.addInteraction(_interaction('second', itemId: 'second'));
+    await Future<void>.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(errors, hasLength(1));
+    expect(navigator.destinations, ['/protected/second']);
+    await coordinator.dispose();
+    await client.dispose();
+    await sessionManager.dispose();
+  });
 }
 
 NotificationInteraction _interaction(String id, {required String itemId}) =>
@@ -219,4 +261,18 @@ final class _RecordingNavigator implements NotificationNavigator {
 
   @override
   void go(String destination) => destinations.add(destination);
+}
+
+final class _ThrowOnceDestinationMapper
+    implements NotificationDestinationMapper {
+  var _shouldThrow = true;
+
+  @override
+  Result<String> map(NotificationPayload payload) {
+    if (_shouldThrow) {
+      _shouldThrow = false;
+      throw StateError('synthetic mapper failure');
+    }
+    return const ReferenceNotificationDestinationMapper().map(payload);
+  }
 }

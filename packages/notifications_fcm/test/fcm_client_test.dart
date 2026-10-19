@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:notifications_core/notifications_core.dart';
 import 'package:notifications_core/testing.dart';
@@ -33,6 +35,43 @@ void main() {
 
     expect(interactions.map((value) => value.id), ['tap-1', 'tap-2']);
     await subscription.cancel();
+    await client.dispose();
+    await port.dispose();
+  });
+
+  test('concurrent initialization installs one subscription set', () async {
+    final releaseInitialMessage = Completer<void>();
+    final port = FakeFcmPort()
+      ..initialMessageBarrier = releaseInitialMessage.future
+      ..initialMessage = const FcmMessage(
+        id: 'initial',
+        data: {'interaction_id': 'initial-tap'},
+      );
+    final client = FcmPushNotificationClient(
+      port: port,
+      isMobilePlatform: true,
+    );
+    final tokens = <PushToken>[];
+    final interactions = <NotificationInteraction>[];
+    final tokenSubscription = client.tokenChanges.listen(tokens.add);
+    final interactionSubscription = client.interactions.listen(
+      interactions.add,
+    );
+
+    final first = client.initialize();
+    final second = client.initialize();
+    expect(port.initialMessageRequests, 1);
+
+    releaseInitialMessage.complete();
+    await Future.wait([first, second]);
+    port.tokenController.add('one-token');
+    await Future<void>.delayed(Duration.zero);
+
+    expect(port.initialMessageRequests, 1);
+    expect(tokens.map((token) => token.value), ['one-token']);
+    expect(interactions.map((interaction) => interaction.id), ['initial-tap']);
+    await tokenSubscription.cancel();
+    await interactionSubscription.cancel();
     await client.dispose();
     await port.dispose();
   });

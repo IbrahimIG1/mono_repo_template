@@ -45,7 +45,7 @@ final class RealtimeWebSocketClient implements RealtimeClient {
   WebSocketConnection? _connection;
   StreamSubscription<Object?>? _messageSubscription;
   Future<Result<void>>? _connectOperation;
-  Future<void>? _reconnectOperation;
+  Future<Result<void>>? _reconnectOperation;
   Timer? _heartbeatTimer;
   DateTime _lastActivity = DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
   var _generation = 0;
@@ -84,6 +84,15 @@ final class RealtimeWebSocketClient implements RealtimeClient {
     final existing = _connectOperation;
     if (existing != null) {
       return existing;
+    }
+    final reconnecting = _reconnectOperation;
+    if (reconnecting != null) {
+      if (_configuration?.endpoint != configuration.endpoint) {
+        return Future.value(
+          _failure(RealtimeFailureKind.protocol, 'configuration_changed'),
+        );
+      }
+      return reconnecting;
     }
     _manualDisconnect = false;
     _configuration = configuration;
@@ -276,31 +285,35 @@ final class RealtimeWebSocketClient implements RealtimeClient {
     unawaited(operation.whenComplete(() => _reconnectOperation = null));
   }
 
-  Future<void> _runReconnect() async {
+  Future<Result<void>> _runReconnect() async {
     final configuration = _configuration!;
+    Result<void>? lastFailure;
     for (
       var attempt = 1;
       attempt <= reconnectPolicy.maximumAttempts;
       attempt++
     ) {
       if (_manualDisconnect || _state == RealtimeConnectionState.disposed) {
-        return;
+        return _failure(RealtimeFailureKind.cancelled, 'reconnect_cancelled');
       }
       _setState(RealtimeConnectionState.reconnecting);
       await _delay(
         reconnectPolicy.delayForAttempt(attempt, _random.nextDouble()),
       );
       if (_manualDisconnect || _state == RealtimeConnectionState.disposed) {
-        return;
+        return _failure(RealtimeFailureKind.cancelled, 'reconnect_cancelled');
       }
       final result = await _open(configuration, reconnecting: true);
       if (result is Success<void>) {
-        return;
+        return result;
       }
+      lastFailure = result;
     }
     if (_state != RealtimeConnectionState.disposed) {
       _setState(RealtimeConnectionState.disconnected);
     }
+    return lastFailure ??
+        _failure(RealtimeFailureKind.transport, 'reconnect_exhausted');
   }
 
   void _startHeartbeat(int generation) {

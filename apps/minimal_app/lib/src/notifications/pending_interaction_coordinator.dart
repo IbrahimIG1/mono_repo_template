@@ -31,6 +31,7 @@ final class PendingInteractionCoordinator {
     required this.sessionManager,
     required this.navigator,
     required this.routerReady,
+    this.onUnexpectedError,
   });
 
   final PushNotificationClient client;
@@ -40,6 +41,7 @@ final class PendingInteractionCoordinator {
   final SessionManager sessionManager;
   final NotificationNavigator navigator;
   final Future<void> routerReady;
+  final void Function(Object error, StackTrace stackTrace)? onUnexpectedError;
 
   StreamSubscription<NotificationInteraction>? _subscription;
   Future<void> _tail = Future.value();
@@ -50,7 +52,13 @@ final class PendingInteractionCoordinator {
       return;
     }
     _subscription = client.interactions.listen((interaction) {
-      _tail = _tail.then((_) => _handle(interaction));
+      _tail = _tail.then((_) async {
+        try {
+          await _handle(interaction);
+        } on Object catch (error, stackTrace) {
+          onUnexpectedError?.call(error, stackTrace);
+        }
+      });
     });
   }
 
