@@ -315,11 +315,41 @@ Future<void> _run(
     executable,
     arguments,
     workingDirectory: workingDirectory,
-    mode: ProcessStartMode.inheritStdio,
     runInShell: Platform.isWindows,
   );
+  final failureTail = _OutputTail(6000);
+  final stdoutDone = process.stdout.transform(utf8.decoder).forEach((chunk) {
+    stdout.write(chunk);
+    failureTail.add(chunk);
+  });
+  final stderrDone = process.stderr.transform(utf8.decoder).forEach((chunk) {
+    stderr.write(chunk);
+    failureTail.add(chunk);
+  });
   final exitCode = await process.exitCode;
+  await Future.wait([stdoutDone, stderrDone]);
   if (exitCode != 0) {
-    throw ProcessException(executable, arguments, 'Command failed', exitCode);
+    throw ProcessException(
+      executable,
+      arguments,
+      'Command failed. Output tail:\n${failureTail.value}',
+      exitCode,
+    );
+  }
+}
+
+final class _OutputTail {
+  _OutputTail(this.maximumCharacters);
+
+  final int maximumCharacters;
+  var _value = '';
+
+  String get value => _value;
+
+  void add(String chunk) {
+    _value += chunk;
+    if (_value.length > maximumCharacters) {
+      _value = _value.substring(_value.length - maximumCharacters);
+    }
   }
 }
